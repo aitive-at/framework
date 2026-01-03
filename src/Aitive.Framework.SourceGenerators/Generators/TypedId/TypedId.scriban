@@ -1,0 +1,10 @@
+#nullable enable
+
+namespace {{Model.Declaration.Namespace}};
+
+{{Model.Declaration.Accessibility}} readonly partial record struct {{Model.Declaration.Name}} 
+    : global::System.IComparable<{{Model.Declaration.Name}}>
+{ 
+}
+
+#nullable disable

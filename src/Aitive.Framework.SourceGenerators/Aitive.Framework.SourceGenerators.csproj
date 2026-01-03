@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
+    <DefineConstants>SCRIBAN_NO_ASYNC</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="PolySharp">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Scriban" IncludeAssets="Build" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Generators\TypedId\TypedIdAttribute.scriban" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Framework\Dom\TypeName.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Generators\TypedId\TypedId.scriban" />
+    <EmbeddedResource Include="Generators\TypedId\TypedId.scriban" />
+  </ItemGroup>
+</Project>

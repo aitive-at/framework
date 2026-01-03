@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Optimize Condition="'$(Configuration)' == 'Release'">true</Optimize>
+        <DebugSymbols>true</DebugSymbols>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <TargetFramework>net10.0</TargetFramework>
+        <NoWarn>1998;AVLN3001;IDE0290;IDE0053</NoWarn>
+    </PropertyGroup>
+</Project>

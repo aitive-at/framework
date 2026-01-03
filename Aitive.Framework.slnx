@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/Solution/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+    <File Path="version.json" />
+  </Folder>
+  <Project Path="src/Aitive.Framework.Configuration/Aitive.Framework.Configuration.csproj" />
+  <Project Path="src/Aitive.Framework.Cryptography/Aitive.Framework.Cryptography.csproj" />
+  <Project Path="src/Aitive.Framework.Json/Aitive.Framework.Json.csproj" />
+  <Project Path="src/Aitive.Framework.SourceGenerators/Aitive.Framework.SourceGenerators.csproj" />
+  <Project Path="src/Aitive.Framework/Aitive.Framework.csproj" />
+</Solution>
