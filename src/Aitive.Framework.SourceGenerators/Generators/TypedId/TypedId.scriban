@@ -1,10 +1,177 @@
 #nullable enable
 
+using System.Diagnostics.CodeAnalysis;
+
+{{ if Model.Attribute.GenerateJsonConverter }} 
+using System.Text.Json;
+using System.Text.Json.Serialization;
+{{ end }}
+{{ if Model.Attribute.GenerateTypeConverter }}
+using System.ComponentModel;
+using System.Globalization;
+{{ end }}
+
 namespace {{Model.Declaration.Namespace}};
 
-{{Model.Declaration.Accessibility}} readonly partial record struct {{Model.Declaration.Name}} 
-    : global::System.IComparable<{{Model.Declaration.Name}}>
+{{ visibility = Model.Declaration.Accessibility }}
+{{ name = Model.Declaration.Name }}
+{{ isSingle = Model.Count == 1 }}
+{{ isFirstString = Model.Values[0].Type.FullReferenceName == "System.String" }}
+{{ firstGlobalReference = Model.Values[0].Type.GlobalReferenceName }}
+
+{{visibility}} readonly partial record struct {{name}} 
+    : 
+    global::System.IParsable<{{name}}>,
+    global::System.IEquatable<{{name}}>,
+    global::System.Numerics.IEqualityOperators<{{name}},{{name}},bool>
 { 
+{{ if Model.Attribute.ImplementCasts }}
+    {{ if isSingle && !isFirstString}}
+ 
+    {{ visibility }} static implicit operator {{firstGlobalReference}}({{name}} id)
+    {
+        return {{Model.Values[0].Name}};
+    }
+    
+    {{ visibility }} static implicit operator {{name}}({{firstGlobalReference}} value )
+    {
+        return new(value);
+    }
+    
+    {{ else }}
+    {{ end }}
+    
+    {{ visibility }} static implicit operator string({{name}} id) 
+    {
+        return id.ToString();
+    }
+    
+    {{ visibility }} static implicit operator {{name}}(string id)
+    {
+        return {{name}}.Parse(id,null);
+    }
+{{ end}}
+{{ if Model.Attribute.ImplementComparisons }} 
+{{ end }}
+    
+    public override string ToString()
+    {
+        {{ if isSingle }}
+            return {{Model.Values[0].Name}}.ToString();
+        {{ else }}
+             return $"{{ for value in Model.Values }}
+               {%{-{-}%}{{-value.Name-}}{%{-}-}%}
+               {{-if !for.last-}}
+                 {{-Model.Attribute.Separator-}}
+               {{-end-}}
+            {{ end }}";
+        {{ end }}
+    }
+    
+    public static {{name}} Parse(string s, IFormatProvider? provider)
+    {
+        return TryParse(s,provider,out var result) ? result : 
+               throw new FormatException($"Could not parse {s} into {nameof({{name}})}");
+    }
+    
+    public static bool TryParse(string?s,IFormatProvider? provider,out {{name}} value)
+    {
+        if(string.IsNullOrWhiteSpace(s))
+        {
+            value = default;
+            return false;    
+        }
+        
+        var idString = s.Trim();
+        
+        {{ if isSingle }}
+            {{ if isFirstString }}
+                value = new(idString);
+                return true;
+            {{ else }}
+                if({{firstGlobalReference}}.TryParse(idString,provider,out var v1) {
+                    value = new(v1);
+                    return true;
+                }
+                
+                value = default;
+                return false;
+            {{ end }}
+        {{ else }}
+        {{ end }}
+    }
 }
+
+{{ if Model.Attribute.GenerateJsonConverter }} 
+
+{{visibility}} sealed class {{name}}JsonConverter : JsonConverter<{{name}}>
+{
+    public override {{name}} Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var stringValue = reader.GetString();
+
+        return {{name}}.Parse(stringValue ?? throw new JsonException($"{typeof({{name}})} cannot be null in Json"), 
+            null);
+    }
+
+    public override {{name}} ReadAsPropertyName(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        return Read(ref reader, typeToConvert, options);
+    }
+
+    public override void Write(Utf8JsonWriter writer, {{name}} value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.ToString());
+    }
+
+    public override void WriteAsPropertyName(Utf8JsonWriter writer, {{name}} value, JsonSerializerOptions options)
+    {
+        writer.WritePropertyName(value.ToString() ?? throw new JsonException($"{typeof({{name}})} ToString returned null"));
+    }
+}
+{{ end }}
+
+{{ if Model.Attribute.GenerateTypeConverter }}
+public class {{name}}TypeConverter : TypeConverter
+{
+    public override bool CanConvertFrom(ITypeDescriptorContext? context,
+        Type sourceType)
+    {
+        return sourceType == typeof(string);
+    }
+
+    public override bool CanConvertTo(ITypeDescriptorContext? context,
+        [NotNullWhen(true)] Type? destinationType)
+    {
+        return destinationType == typeof(string);
+    }
+
+    public override object? ConvertTo(ITypeDescriptorContext? context,
+        CultureInfo? culture,
+        object? value,
+        Type destinationType)
+    {
+        if (value is {{name}} t)
+        {
+            return t.ToString();
+        }
+
+        return null;
+    }
+
+    public override object? ConvertFrom(ITypeDescriptorContext? context,
+        CultureInfo? culture,
+        object value)
+    {
+        if (value is string s)
+        {
+            return {{name}}.Parse(s,
+                culture);
+        }
+
+        return null;
+    }
+}
+{{ end }}
 
 #nullable disable

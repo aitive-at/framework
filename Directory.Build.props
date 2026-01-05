@@ -7,7 +7,14 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <TargetFramework>net10.0</TargetFramework>
-    <NoWarn>1998;AVLN3001;IDE0290;IDE0053</NoWarn>
+    <NoWarn>1998;AVLN3001;IDE0290;IDE0053,NU5128</NoWarn>
   </PropertyGroup>
-  <PropertyGroup></PropertyGroup>
+  <PropertyGroup>
+    <Authors>Aitive Technologies Gmbh Team</Authors>
+    <Company>Aitive Technologies Gmbh</Company>
+    <PackageId>$(MSBuildProjectName)</PackageId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Nerdbank.GitVersioning" PrivateAssets="all" />
+  </ItemGroup>
 </Project>

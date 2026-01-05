@@ -49,7 +49,7 @@ public abstract class AttributedTypeSourceGenerator<T>
 
     protected override string OnGetOutputPath(GeneratorAttributeSyntaxContext input)
     {
-        return input.TargetSymbol.CompanionFilename;
+        return ((ITypeSymbol)input.TargetSymbol).CompanionFilename;
     }
 
     protected virtual string? OnGenerate(

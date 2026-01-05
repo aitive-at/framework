@@ -78,7 +78,9 @@ public abstract class TemplatedSourceGenerator<T> : IIncrementalGenerator
         if (model != null)
         {
             var scriptModel = new ScriptObject { ["Model"] = model };
+            scriptModel.Import(typeof(TemplateFunctions));
             WellKnownNamespaces.Export(scriptModel);
+
             templateContext.PushGlobal(scriptModel);
         }
 

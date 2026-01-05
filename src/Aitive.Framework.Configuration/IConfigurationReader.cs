@@ -1,6 +1,3 @@
 ﻿namespace Aitive.Framework.Configuration;
 
-public interface IConfigurationReader
-{
-    
-}
+public interface IConfigurationReader { }

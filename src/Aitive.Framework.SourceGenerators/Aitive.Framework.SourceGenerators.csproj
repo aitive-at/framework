@@ -7,6 +7,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
     <DefineConstants>SCRIBAN_NO_ASYNC</DefineConstants>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,11 +26,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Generators\TypedId\TypedIdAttribute.scriban" />
+    <None
+      Include="$(OutputPath)\$(AssemblyName).dll"
+      Pack="true"
+      PackagePath="analyzers/dotnet/cs"
+      Visible="false"
+    />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Framework\Dom\TypeName.cs" />
+    <None Remove="Generators\TypedId\TypedIdAttribute.scriban" />
   </ItemGroup>
 
   <ItemGroup>

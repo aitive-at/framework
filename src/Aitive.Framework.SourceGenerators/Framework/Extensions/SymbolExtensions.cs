@@ -5,7 +5,7 @@ namespace Aitive.Framework.SourceGenerators.Framework.Extensions;
 
 internal static class SymbolExtensions
 {
-    extension(ISymbol symbol)
+    extension(ITypeSymbol symbol)
     {
         internal string FullName =>
             symbol.ToDisplayString(
@@ -36,6 +36,16 @@ internal static class SymbolExtensions
 
         internal string CompanionFilename => symbol.FullName + ".g.cs";
 
+        internal string LocalReferenceName =>
+            symbol.ToDisplayString(
+                new SymbolDisplayFormat(
+                    SymbolDisplayGlobalNamespaceStyle.Omitted,
+                    SymbolDisplayTypeQualificationStyle.NameOnly,
+                    SymbolDisplayGenericsOptions.IncludeTypeParameters,
+                    miscellaneousOptions: SymbolDisplayMiscellaneousOptions.None
+                )
+            );
+
         internal string GlobalReferenceName => $"global::{symbol.ReferenceName}";
 
         internal string ReferenceName =>
@@ -45,14 +55,14 @@ internal static class SymbolExtensions
                     SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces,
                     SymbolDisplayGenericsOptions.IncludeTypeParameters,
                     propertyStyle: SymbolDisplayPropertyStyle.NameOnly,
-                    miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes
+                    miscellaneousOptions: SymbolDisplayMiscellaneousOptions.None
                 )
             );
 
         internal TypedValue ToTypedValue(
             string name,
             Accessibility accessibility = Accessibility.Public
-        ) => new TypedValue(name, symbol.GlobalReferenceName, accessibility.ToCsharpString());
+        ) => new TypedValue(name, new TypeName(symbol), accessibility.ToCsharpString());
 
         internal TypeDeclaration TypeDeclaration =>
             new TypeDeclaration(

@@ -18,6 +18,10 @@ public sealed class TypedIdAttribute
 
     public bool GenerateTypeConverter { get; set; } = true;
 
+    public bool ImplementComparisons { get; set; } = true;
+
+    public bool ImplementCasts { get; set; } = true;
+
     public string Separator { get; set; } = "/";
 }
 
