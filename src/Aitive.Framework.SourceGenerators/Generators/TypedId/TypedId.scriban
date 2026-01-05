@@ -98,7 +98,38 @@ namespace {{Model.Declaration.Namespace}};
                 return false;
             {{ end }}
         {{ else }}
-        {{ end }}
+            var parts = idString.Split("{{Model.Attribute.Separator}}",{{Model.Count}},global::System.StringSplitOptions.RemoveEmptyEntries 
+            | global::System.StringSplitOptions.TrimEntries);
+            
+            if(parts.Length != {{Model.Count}}){
+                value = default;
+                return false;
+            }
+            
+            {{ for i in 0 .. (Model.Count -1) }} 
+                {{ currentValue = Model.Values[i] }}
+                {{ if currentValue.Type.FullReferenceName == "System.String" }} 
+                   var v{{i}} = parts[{{i}}];
+                {{ else }}
+                   if ( !{{currentValue.Type.FullReferenceName}}.TryParse(parts[{{i}}],null,out var v{{i}}))
+                   {
+                       value = default;
+                       return false;
+                   }
+                {{ end }}
+
+            {{ end }}
+            
+              value = new(
+                           {{ for i in 0 .. (Model.Count -1) }}
+                               v{{i}}
+                               {{-if !for.last-}}
+                                ,
+                               {{-end-}}
+                           {{ end }}
+                        );
+                        return true;
+        {{end}}
     }
 }
 
