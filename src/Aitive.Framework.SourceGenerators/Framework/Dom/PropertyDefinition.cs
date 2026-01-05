@@ -1,10 +1,14 @@
-﻿using Aitive.Framework.SourceGenerators.Framework.Dom.Types;
+﻿using Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
 namespace Aitive.Framework.SourceGenerators.Framework.Dom;
 
-public sealed class PropertyDefinition(string name, TypeRef type, object? defaultValue)
+public sealed class PropertyDefinition(
+    string name,
+    AttributeParameterType type,
+    object? defaultValue
+)
 {
     public string Name { get; } = name;
-    public TypeRef Type { get; } = type;
+    public AttributeParameterType AttributeParameterType { get; } = type;
     public object? DefaultValue { get; } = defaultValue;
 }

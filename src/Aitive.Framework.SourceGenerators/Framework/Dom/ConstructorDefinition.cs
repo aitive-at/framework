@@ -1,4 +1,4 @@
-﻿using Aitive.Framework.SourceGenerators.Framework.Dom.Types;
+﻿using Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
 namespace Aitive.Framework.SourceGenerators.Framework.Dom;
 
@@ -17,7 +17,7 @@ public sealed class ConstructorDefinition(string? name = null)
 
     public ConstructorDefinition WithParameter(
         string name,
-        TypeRef type,
+        AttributeParameterType type,
         object? defaultValue = null,
         bool isParams = false
     )

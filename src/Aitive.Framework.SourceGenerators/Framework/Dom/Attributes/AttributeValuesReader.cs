@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using Aitive.Framework.SourceGenerators.Framework.Dom.Types;
 using Microsoft.CodeAnalysis;
 
 namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
@@ -42,7 +41,7 @@ public sealed class AttributeValuesReader
             {
                 var param = matchedCtor.Parameters[i];
                 var propName = ToPascalCase(param.Name);
-                values[propName] = ConvertValue(ctorArgs[i], param.Type);
+                values[propName] = ConvertValue(ctorArgs[i], param.AttributeParameterType);
             }
 
             // Apply defaults for missing constructor parameters
@@ -52,7 +51,10 @@ public sealed class AttributeValuesReader
                 var propName = ToPascalCase(param.Name);
                 if (!values.ContainsKey(propName))
                 {
-                    values[propName] = GetDefaultValue(param.Type, param.DefaultValue);
+                    values[propName] = GetDefaultValue(
+                        param.AttributeParameterType,
+                        param.DefaultValue
+                    );
                 }
             }
         }
@@ -65,7 +67,7 @@ public sealed class AttributeValuesReader
             );
             if (prop != null)
             {
-                values[namedArg.Key] = ConvertValue(namedArg.Value, prop.Type);
+                values[namedArg.Key] = ConvertValue(namedArg.Value, prop.AttributeParameterType);
             }
         }
 
@@ -74,7 +76,7 @@ public sealed class AttributeValuesReader
         {
             if (!values.ContainsKey(prop.Name))
             {
-                values[prop.Name] = GetDefaultValue(prop.Type, prop.DefaultValue);
+                values[prop.Name] = GetDefaultValue(prop.AttributeParameterType, prop.DefaultValue);
             }
         }
 
@@ -137,7 +139,7 @@ public sealed class AttributeValuesReader
     {
         for (int i = 0; i < specParams.Count; i++)
         {
-            var specType = specParams[i].Type;
+            var specType = specParams[i].AttributeParameterType;
             var attrType = attrParams[i].Type;
 
             // Check if types match based on the spec's TypeRef kind
@@ -149,20 +151,23 @@ public sealed class AttributeValuesReader
         return true;
     }
 
-    private static bool TypeRefMatchesSymbol(TypeRef typeRef, ITypeSymbol typeSymbol)
+    private static bool TypeRefMatchesSymbol(AttributeParameterType type, ITypeSymbol typeSymbol)
     {
-        return typeRef switch
+        return type switch
         {
-            SymbolTypeRef => typeSymbol.ToDisplayString() == "System.Type",
-            EnumTypeRef e => typeSymbol.ToDisplayString() == e.FullyQualifiedName,
-            PrimitiveTypeRef p => MatchesPrimitiveType(p, typeSymbol),
-            ArrayTypeRef a => typeSymbol is IArrayTypeSymbol arr
-                && TypeRefMatchesSymbol(a.ElementType, arr.ElementType),
+            SymbolAttributeParameterType => typeSymbol.ToDisplayString() == "System.Type",
+            EnumAttributeParameterType e => typeSymbol.ToDisplayString() == e.FullyQualifiedName,
+            PrimitiveAttributeParameterType p => MatchesPrimitiveType(p, typeSymbol),
+            ArrayAttributeParameterType a => typeSymbol is IArrayTypeSymbol arr
+                && TypeRefMatchesSymbol(a.ElementAttributeParameterType, arr.ElementType),
             _ => false,
         };
     }
 
-    private static bool MatchesPrimitiveType(PrimitiveTypeRef p, ITypeSymbol typeSymbol)
+    private static bool MatchesPrimitiveType(
+        PrimitiveAttributeParameterType p,
+        ITypeSymbol typeSymbol
+    )
     {
         var displayName = typeSymbol.ToDisplayString();
         var keyword = p.ToCSharpString().TrimEnd('?');
@@ -170,7 +175,7 @@ public sealed class AttributeValuesReader
             || displayName == $"System.{char.ToUpper(keyword[0])}{keyword.Substring(1)}";
     }
 
-    private object? ConvertValue(TypedConstant constant, TypeRef typeRef)
+    private object? ConvertValue(TypedConstant constant, AttributeParameterType type)
     {
         if (constant.Kind == TypedConstantKind.Error)
             return null;
@@ -178,16 +183,25 @@ public sealed class AttributeValuesReader
         if (constant.IsNull)
             return null;
 
-        return typeRef switch
+        return type switch
         {
-            SymbolTypeRef => constant.Value as INamedTypeSymbol,
-            EnumTypeRef => new EnumValue(constant.Type as INamedTypeSymbol, constant.Value),
-            ArrayTypeRef arr => ConvertArray(constant.Values, arr.ElementType),
+            SymbolAttributeParameterType => constant.Value as INamedTypeSymbol,
+            EnumAttributeParameterType => new EnumValue(
+                constant.Type as INamedTypeSymbol,
+                constant.Value
+            ),
+            ArrayAttributeParameterType arr => ConvertArray(
+                constant.Values,
+                arr.ElementAttributeParameterType
+            ),
             _ => constant.Value,
         };
     }
 
-    private object?[] ConvertArray(ImmutableArray<TypedConstant> values, TypeRef elementType)
+    private object?[] ConvertArray(
+        ImmutableArray<TypedConstant> values,
+        AttributeParameterType elementType
+    )
     {
         var result = new object?[values.Length];
         for (int i = 0; i < values.Length; i++)
@@ -197,7 +211,7 @@ public sealed class AttributeValuesReader
         return result;
     }
 
-    private static object? GetDefaultValue(TypeRef type, object? specifiedDefault)
+    private static object? GetDefaultValue(AttributeParameterType type, object? specifiedDefault)
     {
         if (specifiedDefault != null)
         {

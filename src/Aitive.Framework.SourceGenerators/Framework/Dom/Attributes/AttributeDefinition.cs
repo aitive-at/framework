@@ -1,5 +1,4 @@
 using System.Text;
-using Aitive.Framework.SourceGenerators.Framework.Dom.Types;
 
 namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
@@ -89,7 +88,7 @@ public sealed class AttributeDefinition(string name)
     /// </summary>
     public AttributeDefinition WithParameter(
         string name,
-        TypeRef type,
+        AttributeParameterType type,
         object? defaultValue = null,
         bool isParams = false
     )
@@ -99,7 +98,11 @@ public sealed class AttributeDefinition(string name)
         return this;
     }
 
-    public AttributeDefinition WithProperty(string name, TypeRef type, object? defaultValue = null)
+    public AttributeDefinition WithProperty(
+        string name,
+        AttributeParameterType type,
+        object? defaultValue = null
+    )
     {
         _properties.Add(new PropertyDefinition(name, type, defaultValue));
         return this;
@@ -172,7 +175,7 @@ public sealed class AttributeDefinition(string name)
             var propName = ToPascalCase(param.Name);
             var setter = needsPrivateSet ? " private set;" : "";
             sb.AppendLine(
-                $"    internal {param.Type.ToCSharpString()} {propName} {{ get;{setter} }}"
+                $"    internal {param.AttributeParameterType.ToCSharpString()} {propName} {{ get;{setter} }}"
             );
         }
 
@@ -180,9 +183,11 @@ public sealed class AttributeDefinition(string name)
         foreach (var prop in definition.Properties)
         {
             var defaultPart =
-                prop.DefaultValue != null ? $" = {FormatValue(prop.DefaultValue, prop.Type)};" : "";
+                prop.DefaultValue != null
+                    ? $" = {FormatValue(prop.DefaultValue, prop.AttributeParameterType)};"
+                    : "";
             sb.AppendLine(
-                $"    internal {prop.Type.ToCSharpString()} {prop.Name} {{ get; set; }}{defaultPart}"
+                $"    internal {prop.AttributeParameterType.ToCSharpString()} {prop.Name} {{ get; set; }}{defaultPart}"
             );
         }
 
@@ -215,15 +220,17 @@ public sealed class AttributeDefinition(string name)
     private static string FormatParameter(ParameterDefinition param)
     {
         var prefix = param.IsParams ? "params " : "";
-        var suffix = param.HasDefault ? $" = {FormatValue(param.DefaultValue, param.Type)}" : "";
-        return $"{prefix}{param.Type.ToCSharpString()} {param.Name}{suffix}";
+        var suffix = param.HasDefault
+            ? $" = {FormatValue(param.DefaultValue, param.AttributeParameterType)}"
+            : "";
+        return $"{prefix}{param.AttributeParameterType.ToCSharpString()} {param.Name}{suffix}";
     }
 
-    private static string FormatValue(object? value, TypeRef type)
+    private static string FormatValue(object? value, AttributeParameterType type)
     {
         if (value == null)
         {
-            return type is EnumTypeRef ? "default" : "null";
+            return type is EnumAttributeParameterType ? "default" : "null";
         }
 
         return value switch

@@ -1,6 +1,7 @@
-namespace Aitive.Framework.SourceGenerators.Framework.Dom.Types;
+namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
-public sealed class EnumTypeRef(string fullyQualifiedName, bool nullable) : TypeRef
+public sealed class EnumAttributeParameterType(string fullyQualifiedName, bool nullable)
+    : AttributeParameterType
 {
     public string FullyQualifiedName { get; } = fullyQualifiedName;
 
@@ -10,5 +11,6 @@ public sealed class EnumTypeRef(string fullyQualifiedName, bool nullable) : Type
     public override bool IsNullable => nullable;
     public override Type? ClrType => null; // Enum might not exist in generator
 
-    public override TypeRef Nullable() => new EnumTypeRef(FullyQualifiedName, true);
+    public override AttributeParameterType Nullable() =>
+        new EnumAttributeParameterType(FullyQualifiedName, true);
 }

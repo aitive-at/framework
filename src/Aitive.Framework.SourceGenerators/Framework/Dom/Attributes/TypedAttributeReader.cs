@@ -1,5 +1,4 @@
 using System.Reflection;
-using Aitive.Framework.SourceGenerators.Framework.Dom.Types;
 using Microsoft.CodeAnalysis;
 
 namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
@@ -161,7 +160,7 @@ public static class AttributeDefinitionBuilder
         return spec;
     }
 
-    private static TypeRef GetTypeRef(Type type, ICustomAttributeProvider member)
+    private static AttributeParameterType GetTypeRef(Type type, ICustomAttributeProvider member)
     {
         // Check for special markers
         // For [TypeSymbol] and [EnumSymbol], we don't treat plain 'object' as nullable
@@ -170,7 +169,7 @@ public static class AttributeDefinitionBuilder
         if (member.GetCustomAttributes(typeof(TypeSymbolAttribute), false).Length > 0)
         {
             var isNullable = Nullable.GetUnderlyingType(type) != null;
-            return TypeRef.Type(isNullable);
+            return AttributeParameterType.Type(isNullable);
         }
 
         var enumAttr = member
@@ -180,7 +179,7 @@ public static class AttributeDefinitionBuilder
         if (enumAttr != null)
         {
             var isNullable = Nullable.GetUnderlyingType(type) != null;
-            return TypeRef.Enum(enumAttr.FullTypeName, isNullable);
+            return AttributeParameterType.Enum(enumAttr.FullTypeName, isNullable);
         }
 
         // Handle nullable
@@ -193,66 +192,66 @@ public static class AttributeDefinitionBuilder
         return GetTypeRefCore(type);
     }
 
-    private static TypeRef GetTypeRefCore(Type type)
+    private static AttributeParameterType GetTypeRefCore(Type type)
     {
         if (type == typeof(string))
         {
-            return TypeRef.String;
+            return AttributeParameterType.String;
         }
 
         if (type == typeof(int))
         {
-            return TypeRef.Int;
+            return AttributeParameterType.Int;
         }
 
         if (type == typeof(long))
         {
-            return TypeRef.Long;
+            return AttributeParameterType.Long;
         }
 
         if (type == typeof(bool))
         {
-            return TypeRef.Bool;
+            return AttributeParameterType.Bool;
         }
 
         if (type == typeof(double))
         {
-            return TypeRef.Double;
+            return AttributeParameterType.Double;
         }
 
         if (type == typeof(float))
         {
-            return TypeRef.Float;
+            return AttributeParameterType.Float;
         }
 
         if (type == typeof(char))
         {
-            return TypeRef.Char;
+            return AttributeParameterType.Char;
         }
 
         if (type == typeof(byte))
         {
-            return TypeRef.Byte;
+            return AttributeParameterType.Byte;
         }
 
         if (type == typeof(object))
         {
-            return TypeRef.Object;
+            return AttributeParameterType.Object;
         }
 
         if (type == typeof(Type))
         {
-            return TypeRef.Type();
+            return AttributeParameterType.Type();
         }
 
         if (type.IsArray)
         {
-            return TypeRef.Array(GetTypeRefCore(type.GetElementType()!));
+            return AttributeParameterType.Array(GetTypeRefCore(type.GetElementType()!));
         }
 
         if (type.IsEnum)
         {
-            return TypeRef.Enum(type.FullName!, false);
+            return AttributeParameterType.Enum(type.FullName!, false);
         }
 
         throw new NotSupportedException($"Type {type} is not supported in attribute specs");
