@@ -1,6 +1,3 @@
 ﻿namespace Aitive.Framework.Functional.Pipelines;
 
-public class PipelineBuilder<T,TStep>
-{
-    
-}
+public sealed class PipelineBuilder<T, TStep, TPhase> { }
