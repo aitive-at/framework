@@ -1,4 +1,4 @@
-﻿namespace Aitive.Framework.Functional.Pipelines;
+namespace Aitive.Framework.Functional.Pipelines;
 
 public interface IPipelineBuilder<T, in TStep, in TPhase, out TSelf>
     where TStep : IPipelineStep<T>
