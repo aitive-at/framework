@@ -2,31 +2,70 @@
 
 namespace Aitive.Framework.Json;
 
-[Flags]
-public enum JsonMergeMode
+public enum JsonSimpleMergePolicy
 {
-    None = 0x00,
-    IfPresent = 0x01,
-    IfNotPresent = 0x02,
+    Ignore,
+    Write,
+}
 
-    ArrayAppend = 0x04,
+public enum JsonArrayMergePolicy
+{
+    Ignore,
+    Write,
+    Append,
+    Merge,
+}
 
-    ArrayMerge = 0x08,
+public enum JsonObjectMergePolicy
+{
+    Ignore,
+    Write,
+    Merge,
+}
 
-    Recursive = 0x10,
-
-    PreferTarget = IfNotPresent,
-    PreferSource = IfNotPresent | IfPresent,
-
-    Default = PreferSource | Recursive,
+public sealed record JsonMergePolicy(
+    JsonSimpleMergePolicy ScalarPresent,
+    JsonSimpleMergePolicy ScalarNotPresent,
+    JsonArrayMergePolicy ArrayPresent,
+    JsonSimpleMergePolicy ArrayNotPresent,
+    JsonObjectMergePolicy ObjectPresent,
+    JsonSimpleMergePolicy ObjectNotPresent,
+    bool Recurse
+)
+{
+    public static readonly JsonMergePolicy Default = new(
+        JsonSimpleMergePolicy.Write,
+        JsonSimpleMergePolicy.Write,
+        JsonArrayMergePolicy.Write,
+        JsonSimpleMergePolicy.Write,
+        JsonObjectMergePolicy.Write,
+        JsonSimpleMergePolicy.Write,
+        false
+    );
 }
 
 public static class JsonObjectExtensions
 {
     extension(JsonObject jsonObject)
     {
-        public JsonObject Merge(JsonObject source, JsonMergeMode mergeMode = JsonMergeMode.Default)
+        public JsonObject Merge(JsonObject source, JsonMergePolicy? mergePolicy = null)
         {
+            var actualMergePolicy = mergePolicy ?? JsonMergePolicy.Default;
+
+            var result = new JsonObject();
+
+            foreach (var (key, sourceValue) in source)
+            {
+                if (jsonObject.TryGetPropertyValue(key, out var targetValue))
+                {
+                    // Present
+                }
+                else
+                {
+                    // Not present
+                }
+            }
+
             return source;
         }
     }
