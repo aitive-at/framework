@@ -83,7 +83,7 @@ public sealed class AttributeValuesReader
         return new AttributeValues(values, typeParams, matchedCtor?.Name);
     }
 
-    private ConstructorDefinition? FindMatchingConstructor(
+    private AttributeConstructorDefinition? FindMatchingConstructor(
         ImmutableArray<TypedConstant> args,
         AttributeData data
     )
@@ -133,7 +133,7 @@ public sealed class AttributeValuesReader
     }
 
     private static bool MatchesSignature(
-        IReadOnlyList<ParameterDefinition> specParams,
+        IReadOnlyList<AttributeParameterDefinition> specParams,
         ImmutableArray<IParameterSymbol> attrParams
     )
     {

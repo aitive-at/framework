@@ -10,25 +10,23 @@ public sealed class AttributeDefinition(string name)
     public string Name { get; } = name.EndsWith("Attribute") ? name : name + "Attribute";
     public string? Namespace { get; private set; }
 
-    public string Fullname => Namespace != null ? $"{Namespace}.{Name}" : Name;
+    public string FullName => Namespace != null ? $"{Namespace}.{Name}" : Name;
 
     public string Filename => FullName + ".g.cs";
 
     public AttributeTargets Targets { get; private set; } = AttributeTargets.All;
     public bool AllowMultiple { get; private set; }
     public bool Inherited { get; private set; } = true;
-    public IReadOnlyList<ConstructorDefinition> Constructors => _constructors;
-    public IReadOnlyList<PropertyDefinition> Properties => _properties;
-    public IReadOnlyList<TypeParameterDefinition> TypeParameters => _typeParams;
+    public IReadOnlyList<AttributeConstructorDefinition> Constructors => _constructors;
+    public IReadOnlyList<AttributePropertyDefinition> Properties => _properties;
+    public IReadOnlyList<AttributeTypeParameterDefinition> TypeParameters => _typeParams;
 
-    private readonly List<ConstructorDefinition> _constructors = new();
-    private readonly List<PropertyDefinition> _properties = new();
-    private readonly List<TypeParameterDefinition> _typeParams = new();
+    private readonly List<AttributeConstructorDefinition> _constructors = new();
+    private readonly List<AttributePropertyDefinition> _properties = new();
+    private readonly List<AttributeTypeParameterDefinition> _typeParams = new();
 
     // For backwards compatibility - tracks if using legacy single-constructor mode
-    private ConstructorDefinition? _defaultCtor;
-
-    public string FullName => Namespace is null ? Name : $"{Namespace}.{Name}";
+    private AttributeConstructorDefinition? _defaultCtor;
 
     // Fluent configuration
     public AttributeDefinition WithNamespace(string ns)
@@ -60,10 +58,10 @@ public sealed class AttributeDefinition(string name)
     /// </summary>
     public AttributeDefinition WithTypeParameter(
         string name,
-        Action<TypeParameterDefinition>? configure = null
+        Action<AttributeTypeParameterDefinition>? configure = null
     )
     {
-        var spec = new TypeParameterDefinition(name);
+        var spec = new AttributeTypeParameterDefinition(name);
         configure?.Invoke(spec);
         _typeParams.Add(spec);
         return this;
@@ -74,10 +72,10 @@ public sealed class AttributeDefinition(string name)
     /// </summary>
     public AttributeDefinition WithConstructor(
         string? name,
-        Action<ConstructorDefinition> configure
+        Action<AttributeConstructorDefinition> configure
     )
     {
-        var ctor = new ConstructorDefinition(name);
+        var ctor = new AttributeConstructorDefinition(name);
         configure(ctor);
         _constructors.Add(ctor);
         return this;
@@ -104,7 +102,7 @@ public sealed class AttributeDefinition(string name)
         object? defaultValue = null
     )
     {
-        _properties.Add(new PropertyDefinition(name, type, defaultValue));
+        _properties.Add(new AttributePropertyDefinition(name, type, defaultValue));
         return this;
     }
 
@@ -217,7 +215,7 @@ public sealed class AttributeDefinition(string name)
         return sb.ToString();
     }
 
-    private static string FormatParameter(ParameterDefinition param)
+    private static string FormatParameter(AttributeParameterDefinition param)
     {
         var prefix = param.IsParams ? "params " : "";
         var suffix = param.HasDefault
@@ -276,7 +274,7 @@ public sealed class AttributeDefinition(string name)
         {
             return;
         }
-        _defaultCtor = new ConstructorDefinition(null);
+        _defaultCtor = new AttributeConstructorDefinition(null);
         _constructors.Add(_defaultCtor);
     }
 }

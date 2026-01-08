@@ -1,8 +1,6 @@
-﻿using Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
+﻿namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
-namespace Aitive.Framework.SourceGenerators.Framework.Dom;
-
-public sealed class PropertyDefinition(
+public sealed class AttributePropertyDefinition(
     string name,
     AttributeParameterType type,
     object? defaultValue

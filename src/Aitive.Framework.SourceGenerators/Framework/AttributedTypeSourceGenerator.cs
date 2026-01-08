@@ -1,66 +1,48 @@
 ﻿using Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 using Aitive.Framework.SourceGenerators.Framework.Extensions;
+using Aitive.Framework.SourceGenerators.Framework.Logging;
 using Aitive.Framework.SourceGenerators.Framework.Output;
 using Aitive.Framework.SourceGenerators.Framework.Templating;
 using Microsoft.CodeAnalysis;
 
 namespace Aitive.Framework.SourceGenerators.Framework;
 
-public abstract class AttributedTypeSourceGenerator<T>
-    : TemplatedSourceGenerator<GeneratorAttributeSyntaxContext>
+public abstract class AttributedTypeSourceGenerator<T> : TemplatedSourceGenerator
     where T : class
 {
-    private AttributeDefinition? _attributeDefinition;
-
-    protected override void OnInitialize(IncrementalGeneratorInitializationContext context)
+    protected override void OnInitialize(
+        IncrementalGeneratorInitializationContext context,
+        ILogWriter logWriter
+    )
     {
-        _attributeDefinition = AttributeDefinitionBuilder.From<T>();
+        var attributeDefinition = AttributeDefinition.From<T>();
+        context.AddMarkerAttribute(attributeDefinition);
 
-        EmitAttribute(context, _attributeDefinition);
-
-        var items = context.SyntaxProvider.ForAttributeWithMetadataName(
-            _attributeDefinition.FullName,
+        context.GenerateSourceFilesForAttribute<T>(
             OnFilter,
-            SafeGenerate
+            OnGenerate,
+            OnGenerateFilename,
+            attributeDefinition
         );
-
-        context.AddSourceFiles(items);
     }
 
-    protected override string? OnGenerate(
+    protected virtual bool OnFilter(T attribute, GeneratorAttributeSyntaxContext context)
+    {
+        return true;
+    }
+
+    protected abstract bool OnGenerate(
+        T attribute,
         GeneratorAttributeSyntaxContext input,
-        CancellationToken cancellationToken
+        SourceWriter writer,
+        ILogWriter log
+    );
+
+    protected virtual string OnGenerateFilename(
+        T attribute,
+        GeneratorAttributeSyntaxContext context
     )
     {
-        if (_attributeDefinition == null)
-        {
-            throw new InvalidOperationException("AttributeDefinition is null");
-        }
-
-        var attributes = input.Attributes.Select(a => _attributeDefinition.ReadAs<T>(a)).ToList();
-
-        if (attributes.Count == 0)
-        {
-            return null;
-        }
-
-        return OnGenerate(input, attributes);
+        return ((ITypeSymbol)context.TargetSymbol).CompanionFilename;
     }
-
-    protected override string OnGetOutputPath(GeneratorAttributeSyntaxContext input)
-    {
-        return ((ITypeSymbol)input.TargetSymbol).CompanionFilename;
-    }
-
-    protected virtual string? OnGenerate(
-        GeneratorAttributeSyntaxContext input,
-        IReadOnlyList<T> attributes
-    )
-    {
-        return OnGenerate(input, attributes[0]);
-    }
-
-    protected abstract string? OnGenerate(GeneratorAttributeSyntaxContext input, T attribute);
-
-    protected abstract bool OnFilter(SyntaxNode node, CancellationToken cancellationToken);
 }

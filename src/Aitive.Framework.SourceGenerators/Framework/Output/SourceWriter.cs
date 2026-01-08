@@ -9,7 +9,7 @@ namespace Aitive.Framework.SourceGenerators.Framework.Output;
 /// <summary>
 /// A thin wrapper over <see cref="StringBuilder" /> that adds indentation to each line built.
 /// </summary>
-internal sealed class SourceWriter
+public sealed class SourceWriter
 {
     private readonly StringBuilder _sb = new();
     private readonly bool _useCachedToString;
@@ -184,6 +184,12 @@ internal sealed class SourceWriter
             _sb.AppendLine();
         } while (!isFinalLine);
 
+        return this;
+    }
+
+    internal SourceWriter WriteLineWithoutIndentation(string text)
+    {
+        _sb.AppendLine(text);
         return this;
     }
 

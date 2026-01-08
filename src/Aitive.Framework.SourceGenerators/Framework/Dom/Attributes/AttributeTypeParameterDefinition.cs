@@ -1,9 +1,9 @@
-﻿namespace Aitive.Framework.SourceGenerators.Framework.Dom;
+﻿namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
 /// <summary>
 /// Defines a generic type parameter with constraints.
 /// </summary>
-public sealed class TypeParameterDefinition(string name)
+public sealed class AttributeTypeParameterDefinition(string name)
 {
     public string Name { get; } = name;
     public bool HasClassConstraint { get; private set; }
@@ -16,42 +16,42 @@ public sealed class TypeParameterDefinition(string name)
     private readonly List<string> _typeConstraints = new();
 
     /// <summary>where T : class</summary>
-    public TypeParameterDefinition Class()
+    public AttributeTypeParameterDefinition Class()
     {
         HasClassConstraint = true;
         return this;
     }
 
     /// <summary>where T : struct</summary>
-    public TypeParameterDefinition Struct()
+    public AttributeTypeParameterDefinition Struct()
     {
         HasStructConstraint = true;
         return this;
     }
 
     /// <summary>where T : new()</summary>
-    public TypeParameterDefinition New()
+    public AttributeTypeParameterDefinition New()
     {
         HasNewConstraint = true;
         return this;
     }
 
     /// <summary>where T : notnull</summary>
-    public TypeParameterDefinition NotNull()
+    public AttributeTypeParameterDefinition NotNull()
     {
         HasNotNullConstraint = true;
         return this;
     }
 
     /// <summary>where T : unmanaged</summary>
-    public TypeParameterDefinition Unmanaged()
+    public AttributeTypeParameterDefinition Unmanaged()
     {
         HasUnmanagedConstraint = true;
         return this;
     }
 
     /// <summary>where T : SomeType (base class or interface)</summary>
-    public TypeParameterDefinition Is(string typeConstraint)
+    public AttributeTypeParameterDefinition Is(string typeConstraint)
     {
         _typeConstraints.Add(typeConstraint);
         return this;

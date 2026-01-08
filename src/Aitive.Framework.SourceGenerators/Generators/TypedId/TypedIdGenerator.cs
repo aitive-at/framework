@@ -4,6 +4,7 @@ using Aitive.Framework.SourceGenerators.Framework;
 using Aitive.Framework.SourceGenerators.Framework.Dom;
 using Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 using Aitive.Framework.SourceGenerators.Framework.Extensions;
+using Aitive.Framework.SourceGenerators.Framework.Logging;
 using Aitive.Framework.SourceGenerators.Framework.Output;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -22,13 +23,20 @@ public sealed class TypedIdAttribute
 
     public bool ImplementCasts { get; set; } = true;
 
+    public bool ImplementParsing { get; set; } = true;
+
     public string Separator { get; set; } = "/";
 }
 
 public sealed record TypedIdModel(
     TypeDeclaration Declaration,
     IReadOnlyList<TypedValue> Values,
-    TypedIdAttribute Attribute
+    TypedIdAttribute Attribute,
+    bool GenerateJsonConverter,
+    bool GenerateTypeConverter,
+    bool ImplementComparisons,
+    bool ImplementCasts,
+    bool ImplementParsing
 )
 {
     public int Count => Values.Count;
@@ -37,9 +45,20 @@ public sealed record TypedIdModel(
 [Generator]
 public class TypedIdGenerator : AttributedTypeSourceGenerator<TypedIdAttribute>
 {
-    protected override string? OnGenerate(
+    protected override bool OnFilter(
+        TypedIdAttribute attribute,
+        GeneratorAttributeSyntaxContext context
+    )
+    {
+        return context.TargetNode is RecordDeclarationSyntax
+            && context.TargetNode.IsKind(SyntaxKind.RecordStructDeclaration);
+    }
+
+    protected override bool OnGenerate(
+        TypedIdAttribute attribute,
         GeneratorAttributeSyntaxContext input,
-        TypedIdAttribute attribute
+        SourceWriter writer,
+        ILogWriter log
     )
     {
         var classDeclaration = (RecordDeclarationSyntax)input.TargetNode;
@@ -47,7 +66,8 @@ public class TypedIdGenerator : AttributedTypeSourceGenerator<TypedIdAttribute>
 
         if (classDeclaration.ParameterList == null)
         {
-            return "No properties specified";
+            log.Error("Empty TypedId, no values specified");
+            return false;
         }
 
         var properties = classDeclaration
@@ -60,13 +80,24 @@ public class TypedIdGenerator : AttributedTypeSourceGenerator<TypedIdAttribute>
             .Select(t => t.Type!.ToTypedValue(t.Name, classSymbol.DeclaredAccessibility))
             .ToList();
 
-        var model = new TypedIdModel(classSymbol.TypeDeclaration, properties, attribute);
+        var implementParsing = attribute.ImplementParsing;
+        var implementComparisons = attribute.ImplementComparisons;
+        var implementCasts = attribute.ImplementCasts;
+        var generateJsonConverter = attribute.GenerateJsonConverter;
+        var generateTypeConverter = attribute.GenerateTypeConverter;
 
-        return RenderTemplate("TypedId", model);
-    }
+        var model = new TypedIdModel(
+            classSymbol.TypeDeclaration,
+            properties,
+            attribute,
+            generateJsonConverter,
+            generateTypeConverter,
+            implementComparisons,
+            implementCasts,
+            implementParsing
+        );
 
-    protected override bool OnFilter(SyntaxNode node, CancellationToken cancellationToken)
-    {
-        return node is RecordDeclarationSyntax && node.IsKind(SyntaxKind.RecordStructDeclaration);
+        writer.WriteLineWithoutIndentation(RenderTemplate("TypedId", model));
+        return true;
     }
 }

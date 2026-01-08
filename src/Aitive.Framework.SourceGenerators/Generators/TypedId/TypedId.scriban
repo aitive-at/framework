@@ -2,11 +2,11 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-{{ if Model.Attribute.GenerateJsonConverter }} 
+{{ if Model.GenerateJsonConverter }} 
 using System.Text.Json;
 using System.Text.Json.Serialization;
 {{ end }}
-{{ if Model.Attribute.GenerateTypeConverter }}
+{{ if Model.GenerateTypeConverter }}
 using System.ComponentModel;
 using System.Globalization;
 {{ end }}
@@ -25,7 +25,7 @@ namespace {{Model.Declaration.Namespace}};
     global::System.IEquatable<{{name}}>,
     global::System.Numerics.IEqualityOperators<{{name}},{{name}},bool>
 { 
-{{ if Model.Attribute.ImplementCasts }}
+{{ if Model.ImplementCasts }}
     {{ if isSingle && !isFirstString}}
  
     {{ visibility }} static implicit operator {{firstGlobalReference}}({{name}} id)
@@ -51,7 +51,7 @@ namespace {{Model.Declaration.Namespace}};
         return {{name}}.Parse(id,null);
     }
 {{ end}}
-{{ if Model.Attribute.ImplementComparisons }} 
+{{ if ImplementComparisons }} 
 {{ end }}
     
     public override string ToString()
@@ -59,7 +59,7 @@ namespace {{Model.Declaration.Namespace}};
         {{ if isSingle }}
             return {{Model.Values[0].Name}}.ToString();
         {{ else }}
-             return $"{{ for value in Model.Values }}
+             return $"{{ for value in Values }}
                {%{-{-}%}{{-value.Name-}}{%{-}-}%}
                {{-if !for.last-}}
                  {{-Model.Attribute.Separator-}}
@@ -133,7 +133,7 @@ namespace {{Model.Declaration.Namespace}};
     }
 }
 
-{{ if Model.Attribute.GenerateJsonConverter }} 
+{{ if GenerateJsonConverter }} 
 
 {{visibility}} sealed class {{name}}JsonConverter : JsonConverter<{{name}}>
 {
@@ -162,7 +162,7 @@ namespace {{Model.Declaration.Namespace}};
 }
 {{ end }}
 
-{{ if Model.Attribute.GenerateTypeConverter }}
+{{ if GenerateTypeConverter }}
 public class {{name}}TypeConverter : TypeConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext? context,
