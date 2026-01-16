@@ -185,7 +185,7 @@ public sealed class AttributeDefinition(string name)
                     ? $" = {FormatValue(prop.DefaultValue, prop.AttributeParameterType)};"
                     : "";
             sb.AppendLine(
-                $"    internal {prop.AttributeParameterType.ToCSharpString()} {prop.Name} {{ get; set; }}{defaultPart}"
+                $"    public {prop.AttributeParameterType.ToCSharpString()} {prop.Name} {{ get; set; }}{defaultPart}"
             );
         }
 

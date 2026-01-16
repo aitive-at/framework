@@ -9,9 +9,14 @@
     <File Path="README.md" />
     <File Path="version.json" />
   </Folder>
+  <Project Path="src/Aitive.Framework.Application/Aitive.Framework.Application.csproj" />
+  <Project Path="src/Aitive.Framework.Autofac/Aitive.Framework.Autofac.csproj" />
   <Project Path="src/Aitive.Framework.Configuration/Aitive.Framework.Configuration.csproj" />
   <Project Path="src/Aitive.Framework.Cryptography/Aitive.Framework.Cryptography.csproj" />
   <Project Path="src/Aitive.Framework.Json/Aitive.Framework.Json.csproj" />
+  <Project Path="src/Aitive.Framework.Plugins/Aitive.Framework.Plugins.csproj" />
+  <Project Path="src/Aitive.Framework.Serilog/Aitive.Framework.Serilog.csproj" />
   <Project Path="src/Aitive.Framework.SourceGenerators/Aitive.Framework.SourceGenerators.csproj" />
+  <Project Path="src/Aitive.Framework.Vcs/Aitive.Framework.Vcs.csproj" />
   <Project Path="src/Aitive.Framework/Aitive.Framework.csproj" />
 </Solution>

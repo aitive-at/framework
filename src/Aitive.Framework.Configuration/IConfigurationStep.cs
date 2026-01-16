@@ -2,7 +2,4 @@
 
 namespace Aitive.Framework.Configuration;
 
-public interface IConfigurationMiddleware : IPipelineStep<ConfigurationContext>
-{
-    
-}
+public interface IConfigurationStep : IMiddleware<ConfigurationContext> { }

@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
     <ProjectReference
       Include="..\Aitive.Framework.SourceGenerators\Aitive.Framework.SourceGenerators.csproj"
       OutputItemType="Analyzer"
       ReferenceOutputAssembly="false"
     />
+    <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+    <PackageReference Include="Semver" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Providers\" />
   </ItemGroup>
 </Project>

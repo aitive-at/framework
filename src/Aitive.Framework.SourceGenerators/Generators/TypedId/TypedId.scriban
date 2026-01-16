@@ -30,7 +30,7 @@ namespace {{Model.Declaration.Namespace}};
  
     {{ visibility }} static implicit operator {{firstGlobalReference}}({{name}} id)
     {
-        return {{Model.Values[0].Name}};
+        return id.{{Model.Values[0].Name}};
     }
     
     {{ visibility }} static implicit operator {{name}}({{firstGlobalReference}} value )
@@ -89,7 +89,7 @@ namespace {{Model.Declaration.Namespace}};
                 value = new(idString);
                 return true;
             {{ else }}
-                if({{firstGlobalReference}}.TryParse(idString,provider,out var v1) {
+                if({{firstGlobalReference}}.TryParse(idString,provider,out var v1)) {
                     value = new(v1);
                     return true;
                 }
