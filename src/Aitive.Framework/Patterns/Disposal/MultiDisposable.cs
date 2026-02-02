@@ -1,19 +1,23 @@
 namespace Aitive.Framework.Patterns.Disposal;
 
-public sealed class MultiDisposable : IDisposable
+public class MultiDisposable : Disposable
 {
     private readonly List<IDisposable> _disposables;
 
-    public MultiDisposable(IEnumerable<IDisposable> disposables)
+    public MultiDisposable(IEnumerable<IDisposable> disposables, bool throwOnDoubleDispose = true)
+        : base(throwOnDoubleDispose)
     {
         _disposables = disposables.ToList();
     }
 
-    public void Dispose()
+    protected override void OnDispose(bool disposing)
     {
-        foreach (var disposable in _disposables)
+        if (disposing)
         {
-            disposable.Dispose();
+            foreach (var disposable in _disposables)
+            {
+                disposable.Dispose();
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ public sealed class ExceptionHandlerContext
 {
     private readonly ExceptionDispatchInfo _dispatchInfo;
 
-    internal ExceptionHandlerContext(ExceptionDispatchInfo dispatchInfo)
+    public ExceptionHandlerContext(ExceptionDispatchInfo dispatchInfo)
     {
         _dispatchInfo = dispatchInfo;
         Exception = dispatchInfo.SourceException;
@@ -15,7 +15,7 @@ public sealed class ExceptionHandlerContext
     public bool WasHandled { get; set; }
     public Exception Exception { get; set; }
 
-    internal void RethrowUnhandled()
+    public void RethrowUnhandled()
     {
         if (!WasHandled)
         {
