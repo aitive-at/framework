@@ -18,10 +18,12 @@
   <Project Path="src/Aitive.Framework.Cryptography/Aitive.Framework.Cryptography.csproj" />
   <Project Path="src/Aitive.Framework.Interop/Aitive.Framework.Interop.csproj" />
   <Project Path="src/Aitive.Framework.Json/Aitive.Framework.Json.csproj" />
+  <Project Path="src/Aitive.Framework.Orleans/Aitive.Framework.Orleans.csproj" />
   <Project Path="src/Aitive.Framework.Plugins/Aitive.Framework.Plugins.csproj" />
   <Project Path="src/Aitive.Framework.Serilog/Aitive.Framework.Serilog.csproj" />
   <Project Path="src/Aitive.Framework.Slang/Aitive.Framework.Slang.csproj" />
   <Project Path="src/Aitive.Framework.SourceGenerators/Aitive.Framework.SourceGenerators.csproj" />
   <Project Path="src/Aitive.Framework.Vcs/Aitive.Framework.Vcs.csproj" />
+  <Project Path="src/Aitive.Framework.Versioning/Aitive.Framework.Versioning.csproj" />
   <Project Path="src/Aitive.Framework/Aitive.Framework.csproj" />
 </Solution>

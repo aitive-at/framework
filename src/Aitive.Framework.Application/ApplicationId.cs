@@ -1,4 +1,5 @@
-﻿using Aitive.Framework.GeneratedCode;
+﻿using System.Runtime.InteropServices;
+using Aitive.Framework.GeneratedCode;
 
 namespace Aitive.Framework.Application;
 
