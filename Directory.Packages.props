@@ -11,6 +11,7 @@
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.1" />
     <PackageVersion Include="Microsoft.Extensions.ObjectPool" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Primitives" Version="10.0.1" />
     <PackageVersion Include="Microsoft.IO.RecyclableMemoryStream" Version="3.0.1" />
     <PackageVersion Include="Microsoft.Orleans.Sdk" Version="10.0.0" />
     <PackageVersion Include="PolySharp" Version="1.15.0" />

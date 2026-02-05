@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
   </ItemGroup>
 </Project>

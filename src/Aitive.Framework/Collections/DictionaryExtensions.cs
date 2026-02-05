@@ -1,7 +1,17 @@
-﻿namespace Aitive.Framework.Collections;
+﻿using Aitive.Framework.Functional;
+
+namespace Aitive.Framework.Collections;
 
 public static class DictionaryExtensions
 {
+    extension<TKey, TValue>(IReadOnlyDictionary<TKey, TValue> input)
+    {
+        public Optional<TValue> GetOptional(TKey key)
+        {
+            return input.TryGetValue(key, out var value) ? value : Optional.None<TValue>();
+        }
+    }
+
     extension<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
     {
         public TValue GetOrAdd(TKey key, TValue value)
