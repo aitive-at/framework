@@ -59,7 +59,7 @@ namespace {{Model.Declaration.Namespace}};
         {{ if isSingle }}
             return {{Model.Values[0].Name}}.ToString();
         {{ else }}
-             return $"{{ for value in Values }}
+             return $"{{ for value in Model.Values }}
                {%{-{-}%}{{-value.Name-}}{%{-}-}%}
                {{-if !for.last-}}
                  {{-Model.Attribute.Separator-}}
