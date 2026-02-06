@@ -8,7 +8,7 @@ public interface IIdentified<TId>
     TId Id { get; set; }
 }
 
-public class IdentifiedDictionaryConverter<TDict, TId, TValue> : JsonConverter<TDict>
+public class IdentifiedDictionaryJsonConverter<TDict, TId, TValue> : JsonConverter<TDict>
     where TValue : IIdentified<TId>
     where TId : notnull
 {
