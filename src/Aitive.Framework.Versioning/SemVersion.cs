@@ -13,7 +13,7 @@ namespace Aitive.Framework.Versioning;
 /// (<a href="https://semver.org">semver.org</a>).
 /// </summary>
 [Serializable]
-public sealed class SemVersion : IEquatable<SemVersion>, ISerializable
+public sealed class SemVersion : IEquatable<SemVersion>, ISerializable, IParsable<SemVersion>
 {
     internal static readonly SemVersion Min = new SemVersion(
         BigInteger.Zero,
@@ -1729,4 +1729,23 @@ public sealed class SemVersion : IEquatable<SemVersion>, ISerializable
     public bool SatisfiesNpm(string range, int maxLength = SemVersionRange.MaxRangeLength) =>
         SatisfiesNpm(range, false, maxLength);
     #endregion
+
+    public static SemVersion Parse(string s, IFormatProvider? provider)
+    {
+        if (!TryParse(s, provider, out var parsed))
+        {
+            throw new FormatException($"Unable to parse {s} into SemVersion");
+        }
+
+        return parsed;
+    }
+
+    public static bool TryParse(
+        [NotNullWhen(true)] string? s,
+        IFormatProvider? provider,
+        [MaybeNullWhen(false)] out SemVersion result
+    )
+    {
+        return TryParse(s, SemVersionStyles.Any, out result);
+    }
 }

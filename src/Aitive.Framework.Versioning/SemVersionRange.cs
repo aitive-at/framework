@@ -14,7 +14,8 @@ namespace Aitive.Framework.Versioning;
 /// </summary>
 public sealed class SemVersionRange
     : IReadOnlyList<UnbrokenSemVersionRange>,
-        IEquatable<SemVersionRange>
+        IEquatable<SemVersionRange>,
+        IParsable<SemVersionRange>
 {
     internal const int MaxRangeLength = 2048;
     internal const string InvalidOptionsMessage =
@@ -626,4 +627,23 @@ public sealed class SemVersionRange
     /// comparison group with "<c>*-*</c>". This includes all prerelease versions because it
     /// matches all prerelease versions.</remarks>
     public override string ToString() => string.Join(" || ", this);
+
+    public static SemVersionRange Parse(string s, IFormatProvider? provider)
+    {
+        if (!TryParse(s, provider, out var parsed))
+        {
+            throw new FormatException($"Unable to parse {s} into SemVersionRange");
+        }
+
+        return parsed;
+    }
+
+    public static bool TryParse(
+        [NotNullWhen(true)] string? s,
+        IFormatProvider? provider,
+        [MaybeNullWhen(false)] out SemVersionRange result
+    )
+    {
+        return SemVersionRange.TryParse(s, SemVersionRangeOptions.Loose, out result);
+    }
 }

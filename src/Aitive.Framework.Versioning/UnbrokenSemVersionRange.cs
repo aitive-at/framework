@@ -412,6 +412,15 @@ public sealed class UnbrokenSemVersionRange : IEquatable<UnbrokenSemVersionRange
     /// versions.</remarks>
     public override string ToString() => toStringCache ??= ToStringInternal();
 
+    public static bool TryParse(
+        [NotNullWhen(true)] string? s,
+        IFormatProvider? provider,
+        [MaybeNullWhen(false)] out SemVersionRange result
+    )
+    {
+        return SemVersionRange.TryParse(s, SemVersionRangeOptions.Loose, out result);
+    }
+
     private string ToStringInternal()
     {
         if (this == Empty)
