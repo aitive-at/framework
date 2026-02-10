@@ -6,7 +6,4 @@
       ReferenceOutputAssembly="false"
     />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Functional\Errors\" />
-  </ItemGroup>
 </Project>

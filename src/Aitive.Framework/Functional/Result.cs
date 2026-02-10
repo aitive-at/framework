@@ -1,3 +1,5 @@
+using System.Numerics;
+
 namespace Aitive.Framework.Functional;
 
 public interface IResult
@@ -14,7 +16,27 @@ public interface IResult
     public object Error { get; }
 }
 
-public readonly struct Result<T, TError> : IResult
+public interface IResult<T, TError> : IResult
+{
+    new T Value { get; }
+    new TError Error { get; }
+
+    Optional<T> AsOptional();
+    T Or(T defaultValue);
+    T OrThrow(Func<TError, Exception> exceptionFactory);
+}
+
+public interface IResult<T, TError, TSelf> : IResult<T, TError>
+    where TSelf : IResult<T, TError, TSelf>
+{
+    static abstract bool operator true(in TSelf value);
+
+    static abstract bool operator false(in TSelf value);
+
+    static abstract bool operator !(in TSelf value);
+}
+
+public readonly struct Result<T, TError> : IResult<T, TError, Result<T, TError>>
 {
     private readonly Optional<T> _value;
     private readonly Optional<TError> _error;
@@ -59,7 +81,7 @@ public readonly struct Result<T, TError> : IResult
     public T Value => _value.Value;
     public TError Error => _error.Value;
 
-    public Optional<T> ToOptional() => _value;
+    public Optional<T> AsOptional() => _value;
 
     public T Or(T defaultValue) => WasSuccessful ? Value : defaultValue;
 
@@ -113,13 +135,13 @@ public readonly struct Result<T, TError> : IResult
 
 public static class Result
 {
-    public static bool IsResult(this Type resultType) =>
+    public static bool IsResult(Type resultType) =>
         resultType.IsConstructedGenericType
         && resultType.GetGenericTypeDefinition() == typeof(Result<,>);
 
     public static (Type ValueType, Type ErrorType) GetUnderlyingTypes(Type resultType)
     {
-        if (!resultType.IsResult())
+        if (!IsResult(resultType))
         {
             throw new ArgumentException("Type is not a Result<,> type");
         }

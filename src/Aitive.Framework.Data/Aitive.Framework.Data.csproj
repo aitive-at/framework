@@ -1,0 +1,6 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.Json\Aitive.Framework.Json.csproj" />
+    <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
+  </ItemGroup>
+</Project>

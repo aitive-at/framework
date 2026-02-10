@@ -11,7 +11,7 @@ namespace Aitive.Framework.Json.Converters;
 public sealed class ResultJsonConverterFactory : JsonConverterFactory // TODO: Add [RequiresDynamicCode] in .NET 7
 {
     /// <inheritdoc />
-    public override bool CanConvert(Type typeToConvert) => typeToConvert.IsResult();
+    public override bool CanConvert(Type typeToConvert) => Result.IsResult(typeToConvert);
 
     /// <inheritdoc />
     [UnconditionalSuppressMessage(

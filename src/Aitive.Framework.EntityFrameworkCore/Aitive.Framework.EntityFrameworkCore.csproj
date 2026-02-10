@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <PackageReference Include="FastExpressionCompiler" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.Data\Aitive.Framework.Data.csproj" />
+  </ItemGroup>
+</Project>

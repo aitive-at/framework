@@ -16,6 +16,8 @@
   <Project Path="src/Aitive.Framework.Autofac/Aitive.Framework.Autofac.csproj" />
   <Project Path="src/Aitive.Framework.Configuration/Aitive.Framework.Configuration.csproj" />
   <Project Path="src/Aitive.Framework.Cryptography/Aitive.Framework.Cryptography.csproj" />
+  <Project Path="src/Aitive.Framework.Data/Aitive.Framework.Data.csproj" />
+  <Project Path="src/Aitive.Framework.EntityFrameworkCore/Aitive.Framework.EntityFrameworkCore.csproj" />
   <Project Path="src/Aitive.Framework.Interop/Aitive.Framework.Interop.csproj" />
   <Project Path="src/Aitive.Framework.Json/Aitive.Framework.Json.csproj" />
   <Project Path="src/Aitive.Framework.Orleans/Aitive.Framework.Orleans.csproj" />
