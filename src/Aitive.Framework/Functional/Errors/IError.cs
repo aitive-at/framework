@@ -3,20 +3,21 @@
 public interface IError { }
 
 public interface IError<T> : IError
-    where T : IError
+    where T : IError<T>
 {
-    static T GetError(string id)
+    static IErrorBuilder<T> Error(string id)
     {
         throw new NotImplementedException();
     }
 }
 
-public partial interface IMyError : IError<IMyError>
+public interface IMyError : IError<IMyError>
 {
-    static partial IMyError M1 { get; }
+    static IMyError M1 => Error("").Build();
 }
 
-public partial interface IMyError
+public interface IBaseError<T> : IError<T>
+    where T : IError<T>
 {
-    static partial IMyError M1 => GetError("");
+    T E1 => Error("").Build();
 }
