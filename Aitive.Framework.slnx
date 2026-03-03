@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Samples/">
+    <Project Path="samples/Aitive.Framework.Samples.MultiTenantWeb/Aitive.Framework.Samples.MultiTenantWeb.csproj" />
+  </Folder>
   <Folder Name="/Solution/">
     <File Path=".editorconfig" />
     <File Path=".gitignore" />
@@ -13,10 +16,12 @@
     <Project Path="src/Aitive.Framework.Slang.Tests/Aitive.Framework.Slang.Tests.csproj" />
   </Folder>
   <Project Path="src/Aitive.Framework.Application/Aitive.Framework.Application.csproj" />
+  <Project Path="src/Aitive.Framework.AspNetCore/Aitive.Framework.AspNetCore.csproj" />
   <Project Path="src/Aitive.Framework.Autofac/Aitive.Framework.Autofac.csproj" />
   <Project Path="src/Aitive.Framework.Configuration/Aitive.Framework.Configuration.csproj" />
   <Project Path="src/Aitive.Framework.Cryptography/Aitive.Framework.Cryptography.csproj" />
   <Project Path="src/Aitive.Framework.Data/Aitive.Framework.Data.csproj" />
+  <Project Path="src/Aitive.Framework.DependencyInjection/Aitive.Framework.DependencyInjection.csproj" />
   <Project Path="src/Aitive.Framework.EntityFrameworkCore/Aitive.Framework.EntityFrameworkCore.csproj" />
   <Project Path="src/Aitive.Framework.Interop/Aitive.Framework.Interop.csproj" />
   <Project Path="src/Aitive.Framework.Json/Aitive.Framework.Json.csproj" />
@@ -25,6 +30,7 @@
   <Project Path="src/Aitive.Framework.Serilog/Aitive.Framework.Serilog.csproj" />
   <Project Path="src/Aitive.Framework.Slang/Aitive.Framework.Slang.csproj" />
   <Project Path="src/Aitive.Framework.SourceGenerators/Aitive.Framework.SourceGenerators.csproj" />
+  <Project Path="src/Aitive.Framework.Tenancy/Aitive.Framework.Tenancy.csproj" />
   <Project Path="src/Aitive.Framework.Vcs/Aitive.Framework.Vcs.csproj" />
   <Project Path="src/Aitive.Framework.Versioning/Aitive.Framework.Versioning.csproj" />
   <Project Path="src/Aitive.Framework/Aitive.Framework.csproj" />

@@ -5,6 +5,15 @@ namespace Aitive.Framework.Collections;
 public static class EnumerableExtensions
 {
     extension<T>(IEnumerable<T> enumerable)
+        where T : IOrdered
+    {
+        public IOrderedEnumerable<T> Ordered()
+        {
+            return enumerable.OrderBy(x => x.Order);
+        }
+    }
+
+    extension<T>(IEnumerable<T> enumerable)
     {
         public bool None() => !enumerable.Any();
 

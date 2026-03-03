@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Aitive.Framework.AspNetCore\Aitive.Framework.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\src\Aitive.Framework.Tenancy\Aitive.Framework.Tenancy.csproj" />
+    <ProjectReference Include="..\..\src\Aitive.Framework\Aitive.Framework.csproj" />
+  </ItemGroup>
+</Project>

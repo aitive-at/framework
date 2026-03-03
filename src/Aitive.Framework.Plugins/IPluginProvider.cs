@@ -2,5 +2,5 @@
 
 public interface IPluginProvider
 {
-    IEnumerable<PluginDescription> GetDescriptions();
+    IEnumerable<PluginManifest> GetDescriptions();
 }

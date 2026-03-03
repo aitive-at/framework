@@ -2,8 +2,8 @@
 
 public interface IPlugin
 {
-    PluginId Id => Description.Id;
-    PluginDescription Description { get; }
+    PluginId Id => Manifest.Id;
+    PluginManifest Manifest { get; }
 
     /// <summary>
     /// Queries for a given interface as implemented by the plugin.
