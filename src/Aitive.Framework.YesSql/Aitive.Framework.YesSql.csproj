@@ -1,2 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.DependencyInjection\Aitive.Framework.DependencyInjection.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="YesSql" />
+  </ItemGroup>
 </Project>
