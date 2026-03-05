@@ -3,6 +3,7 @@ using Aitive.Framework.Plugins;
 using Aitive.Framework.Plugins.Hosts;
 using Aitive.Framework.Plugins.Providers;
 using Aitive.Framework.Samples.PluginWeb.Plugin01;
+using Orleans.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,5 +23,5 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.MapControllers();
-
+app.MapRazorComponents<string>().BindPluginRazorComponents(pluginHost);
 app.Run();

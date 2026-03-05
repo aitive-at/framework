@@ -6,4 +6,7 @@
     <ProjectReference Include="..\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
     <ProjectReference Include="..\Aitive.Framework.Tenancy\Aitive.Framework.Tenancy.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components" />
+  </ItemGroup>
 </Project>

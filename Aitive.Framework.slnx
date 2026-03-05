@@ -35,5 +35,6 @@
   <Project Path="src/Aitive.Framework.Tenancy/Aitive.Framework.Tenancy.csproj" />
   <Project Path="src/Aitive.Framework.Vcs/Aitive.Framework.Vcs.csproj" />
   <Project Path="src/Aitive.Framework.Versioning/Aitive.Framework.Versioning.csproj" />
+  <Project Path="src/Aitive.Framework.YesSql/Aitive.Framework.YesSql.csproj" />
   <Project Path="src/Aitive.Framework/Aitive.Framework.csproj" />
 </Solution>

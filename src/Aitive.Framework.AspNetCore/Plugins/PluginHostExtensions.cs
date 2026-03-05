@@ -1,4 +1,5 @@
 ﻿using Aitive.Framework.Plugins;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,14 @@ public static class PluginHostExtensions
             var builder = new ApplicationPartsPluginBindPointBuilder(mvcBuilder);
             return host.Bind(builder);
         }
+
+        public IPluginBindPoint BindPluginRazorComponents(
+            RazorComponentsEndpointConventionBuilder conventionsBuilder
+        )
+        {
+            var builder = new RazorComponentsPluginBindPointBuilder(conventionsBuilder);
+            return host.Bind(builder);
+        }
     }
 
     extension(IMvcBuilder mvcBuilder)
@@ -40,6 +49,14 @@ public static class PluginHostExtensions
         )
         {
             return pluginHost.BindPluginWebRoot(hostEnvironment, webRootPath);
+        }
+    }
+
+    extension(RazorComponentsEndpointConventionBuilder conventionBuilder)
+    {
+        public IPluginBindPoint BindPluginRazorComponents(IPluginHost pluginHost)
+        {
+            return pluginHost.BindPluginRazorComponents(conventionBuilder);
         }
     }
 }

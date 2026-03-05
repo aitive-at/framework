@@ -1,4 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
   </ItemGroup>

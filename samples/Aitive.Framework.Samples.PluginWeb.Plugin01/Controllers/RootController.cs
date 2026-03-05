@@ -9,6 +9,6 @@ public class RootController(TestService testService) : Controller
     [HttpGet]
     public ActionResult Index()
     {
-        return View();
+        return View(testService);
     }
 }
