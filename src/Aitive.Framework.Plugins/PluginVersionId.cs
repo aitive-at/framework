@@ -1,6 +1,7 @@
-﻿namespace Aitive.Framework.Plugins;
+﻿using Aitive.Framework.GeneratedCode;
+using Aitive.Framework.Versioning;
 
-public struct PluginVersionId
-{
-    
-}
+namespace Aitive.Framework.Plugins;
+
+[TypedId]
+public readonly partial record struct PluginVersionId(PluginId PluginId, SemVersion Version) { }

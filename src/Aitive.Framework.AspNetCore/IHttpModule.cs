@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Aitive.Framework.AspNetCore;
 
-public interface IHttpModule : IOrdered
+public interface IHttpModule
 {
     void Register(IServiceProvider services, IApplicationBuilder app, IEndpointRouteBuilder routes);
 }

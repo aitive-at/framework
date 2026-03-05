@@ -19,7 +19,7 @@ public sealed class SemVersion : IEquatable<SemVersion>, ISerializable, IParsabl
         BigInteger.Zero,
         BigInteger.Zero,
         BigInteger.Zero,
-        new[] { PrereleaseIdentifier.Zero }
+        [PrereleaseIdentifier.Zero]
     );
     internal static readonly SemVersion MinRelease = new SemVersion(
         BigInteger.Zero,
@@ -287,6 +287,11 @@ public sealed class SemVersion : IEquatable<SemVersion>, ISerializable, IParsabl
             Metadata = string.Join(".", metadataIdentifiers);
             MetadataIdentifiers = metadataIdentifiers;
         }
+    }
+
+    public static implicit operator SemVersion(string value)
+    {
+        return SemVersion.Parse(value);
     }
 
     /// <summary>
@@ -579,6 +584,12 @@ public sealed class SemVersion : IEquatable<SemVersion>, ISerializable, IParsabl
         [NotNullWhen(true)] out SemVersion? semver,
         int maxLength = MaxVersionLength
     ) => TryParse(version, SemVersionStyles.Strict, out semver, maxLength);
+
+    public static bool TryParse(
+        string? version,
+        object? dummy,
+        [NotNullWhen(true)] out SemVersion? semver
+    ) => TryParse(version, SemVersionStyles.Strict, out semver);
 
     /// <summary>
     /// Creates a copy of the current instance with multiple changed properties. If changing only

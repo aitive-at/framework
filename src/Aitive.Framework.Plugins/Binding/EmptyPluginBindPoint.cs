@@ -1,6 +1,9 @@
 ﻿namespace Aitive.Framework.Plugins.Binding;
 
-public class EmptyPluginBindPoint
+public sealed class EmptyPluginBindPoint : IPluginBindPoint
 {
-    
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
+    }
 }

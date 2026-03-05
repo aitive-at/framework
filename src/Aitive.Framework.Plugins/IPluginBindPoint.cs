@@ -1,6 +1,3 @@
 ﻿namespace Aitive.Framework.Plugins;
 
-public interface IPluginBindPoint
-{
-    
-}
+public interface IPluginBindPoint : IAsyncDisposable { }

@@ -1,4 +1,4 @@
-﻿using Semver;
+﻿using Aitive.Framework.Versioning;
 
 namespace Aitive.Framework.Application;
 

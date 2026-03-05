@@ -94,5 +94,21 @@ public static class EnumerableExtensions
 
             return result;
         }
+
+        public IEnumerable<T> PossiblyOrdered(int defaultOrder = 0)
+        {
+            return enumerable
+                .Select(o =>
+                {
+                    if (o is IOrdered ordered)
+                    {
+                        return (o, ordered.Order);
+                    }
+
+                    return (o, defaultOrder);
+                })
+                .OrderBy(o => o.Item2)
+                .Select(o => o.o);
+        }
     }
 }

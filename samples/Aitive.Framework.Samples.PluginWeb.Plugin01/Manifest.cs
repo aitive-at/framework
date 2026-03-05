@@ -1,6 +1,3 @@
-﻿namespace Aitive.Framework.Samples.PluginWeb.Plugin01;
+﻿using Aitive.Framework.Plugins;
 
-public class Manifest
-{
-    
-}
+[assembly: Plugin("p1", "1.0.0")]

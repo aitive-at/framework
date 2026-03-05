@@ -1,6 +1,13 @@
-﻿namespace Aitive.Framework.Samples.PluginWeb;
+﻿using Microsoft.AspNetCore.Mvc;
 
-public class TestController
+namespace Aitive.Framework.Samples.PluginWeb;
+
+[Route("/")]
+public class TestController : ControllerBase
 {
-    
+    [HttpGet]
+    public ActionResult Get()
+    {
+        return Ok("ROOT");
+    }
 }

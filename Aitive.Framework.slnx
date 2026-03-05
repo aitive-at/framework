@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/Samples/">
     <Project Path="samples/Aitive.Framework.Samples.MultiTenantWeb/Aitive.Framework.Samples.MultiTenantWeb.csproj" />
+    <Project Path="samples/Aitive.Framework.Samples.PluginWeb.Plugin01/Aitive.Framework.Samples.PluginWeb.Plugin01.csproj" />
+    <Project Path="samples/Aitive.Framework.Samples.PluginWeb/Aitive.Framework.Samples.PluginWeb.csproj" />
   </Folder>
   <Folder Name="/Solution/">
     <File Path=".editorconfig" />

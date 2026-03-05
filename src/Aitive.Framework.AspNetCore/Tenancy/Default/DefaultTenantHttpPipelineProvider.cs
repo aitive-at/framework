@@ -345,7 +345,7 @@ internal sealed class DefaultTenantHttpPipelineProvider
             modules.AddRange(await moduleProvider.GetHttpModules(tenantId, context.RequestAborted));
         }
 
-        foreach (var module in modules.Ordered())
+        foreach (var module in modules.PossiblyOrdered())
         {
             module.Register(tenantScope.ServiceProvider, app, routes);
         }

@@ -1,6 +1,3 @@
 ﻿namespace Aitive.Framework.Reflection;
 
-public class AssemblyScanner
-{
-    
-}
+public sealed class AssemblyScanner { }

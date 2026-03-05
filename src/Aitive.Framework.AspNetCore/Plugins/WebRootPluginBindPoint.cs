@@ -5,12 +5,12 @@ using Microsoft.Extensions.Hosting;
 
 namespace Aitive.Framework.AspNetCore.Plugins;
 
-internal sealed class WebRootPluginBindPointer : IPluginBindPoint
+internal sealed class WebRootPluginBindPoint : IPluginBindPoint
 {
     private readonly IWebHostEnvironment _hostEnvironment;
     private readonly IFileProvider _oldFileProvider;
 
-    internal WebRootPluginBindPointer(
+    internal WebRootPluginBindPoint(
         IWebHostEnvironment hostEnvironment,
         IFileProvider oldFileProvider
     )

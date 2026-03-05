@@ -230,9 +230,13 @@ public sealed class SemVersionRange
     public bool Contains(SemVersion? version)
     {
         // Using `for` loop for better performance
-        for (var i = 0; i < ranges.Count; i++)
-            if (ranges[i].Contains(version))
+        foreach (var t in ranges)
+        {
+            if (t.Contains(version))
+            {
                 return true;
+            }
+        }
 
         return false;
     }

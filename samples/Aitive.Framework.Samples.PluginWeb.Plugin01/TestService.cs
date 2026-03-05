@@ -2,5 +2,5 @@
 
 public class TestService
 {
-    
+    public string GetMessage() => "Yes a service also works";
 }

@@ -1,10 +1,10 @@
-﻿namespace Aitive.Framework.Plugins.Hosts;
+﻿namespace Aitive.Framework.Plugins;
 
 /// <summary>
 /// Thrown when plugin resolution fails. Accumulates all errors rather than
 /// stopping at the first failure.
 /// </summary>
-public sealed class PluginResolutionException : Exception
+public sealed class PluginResolutionException : PluginException
 {
     public IReadOnlyList<string> Errors { get; }
 

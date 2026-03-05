@@ -18,6 +18,10 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.UseHttpTenancy();
 
+app.MapGet("/", () => Results.Ok("Root"));
+
+app.MapGet("c1/c2", () => Results.Ok("c1/c2"));
+
 app.Run();
 
 class TenantHttpModuleProvider : ITenantHttpModuleProvider

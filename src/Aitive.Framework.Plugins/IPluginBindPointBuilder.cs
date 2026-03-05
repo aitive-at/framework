@@ -2,5 +2,5 @@
 
 public interface IPluginBindPointBuilder
 {
-    
+    IPluginBindPoint Build(IReadOnlyList<IPlugin> plugins);
 }
