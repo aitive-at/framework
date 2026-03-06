@@ -2,7 +2,12 @@
 
 namespace Aitive.Framework.Plugins;
 
-public sealed record PluginDependency(PluginId Id, SemVersionRange VersionRange);
+public sealed record PluginDependency(PluginId Id, SemVersionRange VersionRange)
+    : PluginRequest(Id, VersionRange)
+{
+    public PluginDependency(PluginId Id)
+        : this(Id, SemVersionRange.All) { }
+}
 
 public sealed record PluginManifest(
     PluginId Id,

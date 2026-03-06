@@ -9,9 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var projectPluginProvider = new ProjectPluginProvider([typeof(TestService).Assembly]);
 
-var pluginHost = new DefaultPluginHostBuilder()
-    .WithProvider(projectPluginProvider)
-    .Build([new PluginVersionId("p1", "1.0.0")]);
+var pluginHost = new DefaultPluginHostBuilder().WithProvider(projectPluginProvider).Build(["p1"]);
 
 await using var _ = builder.BindPlugins(pluginHost);
 await using var __ = builder.Services.AddMvc().BindPluginControllersWithViews(pluginHost);

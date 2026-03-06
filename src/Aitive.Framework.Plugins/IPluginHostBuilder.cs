@@ -1,4 +1,6 @@
-﻿namespace Aitive.Framework.Plugins;
+﻿using Aitive.Framework.Plugins.Resolution;
+
+namespace Aitive.Framework.Plugins;
 
 public interface IPluginHostBuilder
 {
@@ -6,5 +8,5 @@ public interface IPluginHostBuilder
 
     IPluginHostBuilder WithProvider(IPluginProvider provider);
 
-    IPluginHost Build(IReadOnlyList<PluginVersionId> pluginsToLoad);
+    IPluginHost Build(IReadOnlyList<PluginRequest> requests, PluginResolutionPolicy? policy = null);
 }
