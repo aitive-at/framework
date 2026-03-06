@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
     <ProjectReference
       Include="..\Aitive.Framework.SourceGenerators\Aitive.Framework.SourceGenerators.csproj"
       OutputItemType="Analyzer"

@@ -3,7 +3,7 @@ using Aitive.Framework.Diagnostics.Exceptions;
 using Aitive.Framework.Functional.Pipelines;
 using Microsoft.Extensions.Hosting;
 
-namespace Aitive.Framework.Application;
+namespace Aitive.Framework.Application.Hosting;
 
 public abstract class Application<TBuilder, THost>
     where TBuilder : IHostApplicationBuilder

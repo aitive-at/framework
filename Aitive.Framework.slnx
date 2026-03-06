@@ -17,7 +17,9 @@
   <Folder Name="/Tests/">
     <Project Path="src/Aitive.Framework.Slang.Tests/Aitive.Framework.Slang.Tests.csproj" />
   </Folder>
+  <Project Path="src/Aitive.Framework.Application.Hosting/Aitive.Framework.Application.Hosting.csproj" />
   <Project Path="src/Aitive.Framework.Application/Aitive.Framework.Application.csproj" />
+  <Project Path="src/Aitive.Framework.AspNetCore.Hosting/Aitive.Framework.AspNetCore.Hosting.csproj" />
   <Project Path="src/Aitive.Framework.AspNetCore/Aitive.Framework.AspNetCore.csproj" />
   <Project Path="src/Aitive.Framework.Autofac/Aitive.Framework.Autofac.csproj" />
   <Project Path="src/Aitive.Framework.Configuration/Aitive.Framework.Configuration.csproj" />

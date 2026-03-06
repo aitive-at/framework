@@ -1,0 +1,5 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.Application.Hosting\Aitive.Framework.Application.Hosting.csproj" />
+  </ItemGroup>
+</Project>

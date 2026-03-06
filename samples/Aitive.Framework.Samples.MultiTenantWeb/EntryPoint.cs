@@ -5,7 +5,7 @@ using Aitive.Framework.Collections;
 using Aitive.Framework.Functional;
 using Aitive.Framework.Tenancy;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 builder
     .Services.AddHttpTenancy()
     .WithPathPrefixRouting()

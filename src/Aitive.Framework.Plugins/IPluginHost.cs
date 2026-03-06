@@ -16,7 +16,15 @@ public static class PluginHostExtensions
     {
         public IPluginBindPoint BindPluginServices(IServiceCollection services)
         {
-            return pluginHost.Bind(new ServicePluginBindPointBuilder(services));
+            return pluginHost.BindPluginServices(services, new Dictionary<Type, object>());
+        }
+
+        public IPluginBindPoint BindPluginServices(
+            IServiceCollection services,
+            IReadOnlyDictionary<Type, object> initialServices
+        )
+        {
+            return pluginHost.Bind(new ServicePluginBindPointBuilder(services, initialServices));
         }
     }
 
@@ -24,7 +32,15 @@ public static class PluginHostExtensions
     {
         public IPluginBindPoint BindPluginServices(IPluginHost pluginHost)
         {
-            return pluginHost.BindPluginServices(services);
+            return services.BindPluginServices(pluginHost, new Dictionary<Type, object>());
+        }
+
+        public IPluginBindPoint BindPluginServices(
+            IPluginHost pluginHost,
+            IReadOnlyDictionary<Type, object> initialServices
+        )
+        {
+            return pluginHost.BindPluginServices(services, initialServices);
         }
     }
 }

@@ -13,10 +13,8 @@ var pluginHost = new DefaultPluginHostBuilder()
     .WithProvider(projectPluginProvider)
     .Build([new PluginVersionId("p1", "1.0.0")]);
 
-await using var __ = builder.Services.BindPluginServices(pluginHost);
-await using var ___ = builder.Services.AddMvc().BindPluginControllersWithViews(pluginHost);
-
-await using var _ = builder.Environment.BindPluginWebRoot(pluginHost);
+await using var _ = builder.BindPlugins(pluginHost);
+await using var __ = builder.Services.AddMvc().BindPluginControllersWithViews(pluginHost);
 
 var app = builder.Build();
 
