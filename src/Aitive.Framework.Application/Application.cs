@@ -59,6 +59,8 @@ public abstract class Application<TBuilder, THost, TSelf>
             OnConfigureBuilder(builder);
 
             builder.Services.AddSingleton<TSelf>((TSelf)this);
+            builder.Services.AddSingleton<IApplicationDescription>(Description);
+            builder.Services.AddSingleton<IPluginHost>(PluginHost);
 
             using var host = OnBuildHost(builder);
 
