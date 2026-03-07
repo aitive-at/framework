@@ -6,6 +6,7 @@ using Aitive.Framework.Diagnostics.Logging;
 using Aitive.Framework.Functional.Pipelines;
 using Aitive.Framework.Plugins;
 using Aitive.Framework.Plugins.Hosts;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -44,11 +45,13 @@ public abstract class Application<TBuilder, THost, TSelf>
         {
             var builder = OnCreateBuilder();
 
+            OnSetupConfiguration(Description, builder.Environment, builder.Configuration);
+
             Options.LoggingProvider.ConfigureLogging(
                 Description,
                 builder.Services,
-                builder.Configuration,
-                builder.Environment
+                builder.Environment,
+                builder.Configuration
             );
 
             PluginHost = OnCreatePluginHost(builder);
@@ -56,10 +59,10 @@ public abstract class Application<TBuilder, THost, TSelf>
             OnConfigureBuilder(builder);
 
             builder.Services.AddSingleton<TSelf>((TSelf)this);
-            builder.Services.BindPluginServices(PluginHost);
-            builder.Services.BindPluginConfigurationOptions(PluginHost, builder.Configuration);
 
             using var host = OnBuildHost(builder);
+
+            Logger = host.Services.GetRequiredService<ILogger<TSelf>>();
             OnConfigureHost(host);
 
             // Execute startup tasks
@@ -72,7 +75,7 @@ public abstract class Application<TBuilder, THost, TSelf>
                 await startupTask.Execute(cancellationToken);
             }
 
-            await host.RunAsync(cancellationToken);
+            await OnRunHost(host, cancellationToken);
         }
         catch (Exception ex)
         {
@@ -83,13 +86,53 @@ public abstract class Application<TBuilder, THost, TSelf>
         }
     }
 
+    protected virtual void OnSetupConfiguration(
+        IApplicationDescription description,
+        IHostEnvironment environment,
+        IConfigurationManager configuration
+    )
+    {
+        var baseJsonFileName = description.Id + ".json";
+
+        configuration.Sources.Clear();
+
+        // 1. Base json
+        configuration.AddJsonFile(baseJsonFileName, optional: false, reloadOnChange: false);
+
+        // 2. Environment-specific json
+        //    e.g. mysettings.Development.json
+        configuration.AddJsonFile(
+            $"{System.IO.Path.GetFileNameWithoutExtension(baseJsonFileName)}.{environment.EnvironmentName}{System.IO.Path.GetExtension(baseJsonFileName)}",
+            optional: true,
+            reloadOnChange: false
+        );
+
+        // 4. Environment variables
+        configuration.AddEnvironmentVariables();
+
+        // 5. Command-line args
+        configuration.AddCommandLine(Environment.GetCommandLineArgs());
+    }
+
     protected abstract TBuilder OnCreateBuilder();
 
-    protected abstract void OnConfigureBuilder(TBuilder builder);
+    protected virtual void OnConfigureBuilder(TBuilder builder)
+    {
+        builder.Services.BindPluginServices(PluginHost);
+        builder.Services.BindPluginConfigurationOptions(PluginHost, builder.Configuration);
+    }
 
     protected abstract void OnConfigureHost(THost host);
 
     protected abstract THost OnBuildHost(TBuilder builder);
 
-    protected abstract IPluginHost OnCreatePluginHost(TBuilder builder);
+    protected virtual IPluginHost OnCreatePluginHost(TBuilder builder)
+    {
+        return new NullPluginHost();
+    }
+
+    protected virtual Task OnRunHost(THost host, CancellationToken cancellationToken = default)
+    {
+        return host.RunAsync(cancellationToken);
+    }
 }

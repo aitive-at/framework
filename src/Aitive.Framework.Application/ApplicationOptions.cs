@@ -6,7 +6,7 @@ namespace Aitive.Framework.Application;
 
 public class ApplicationOptions
 {
-    public required ILoggingProvider LoggingProvider { get; init; }
+    public ILoggingProvider LoggingProvider { get; init; } = new NullLoggingProvider();
 
     public IReadOnlyList<IExceptionHandler> ExceptionHandlers { get; init; } =
         Array.Empty<IExceptionHandler>();

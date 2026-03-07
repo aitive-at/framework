@@ -11,7 +11,7 @@ public interface ILoggingProvider
     void ConfigureLogging(
         IApplicationDescription applicationDescription,
         IServiceCollection services,
-        IConfiguration configuration,
-        IHostEnvironment hostEnvironment
+        IHostEnvironment environment,
+        IConfiguration configuration
     );
 }
