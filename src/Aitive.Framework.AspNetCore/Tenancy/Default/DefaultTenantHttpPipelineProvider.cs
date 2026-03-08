@@ -4,6 +4,7 @@ using Aitive.Framework.Collections;
 using Aitive.Framework.Functional;
 using Aitive.Framework.Tenancy;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
@@ -347,7 +348,12 @@ internal sealed class DefaultTenantHttpPipelineProvider
 
         foreach (var module in modules.PossiblyOrdered())
         {
-            module.Register(tenantScope.ServiceProvider, app, routes);
+            module.Register(
+                tenantScope.ServiceProvider,
+                _serviceProvider.GetRequiredService<IWebHostEnvironment>(),
+                app,
+                routes
+            );
         }
 
         // Disable additional endpoint forwarding

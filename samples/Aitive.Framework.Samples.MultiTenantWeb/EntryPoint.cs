@@ -49,6 +49,7 @@ class SharedHttpModule : IHttpModule
 {
     public void Register(
         IServiceProvider services,
+        IWebHostEnvironment host,
         IApplicationBuilder app,
         IEndpointRouteBuilder routes
     )
@@ -61,6 +62,7 @@ class Tenant1HttpModule : IHttpModule
 {
     public void Register(
         IServiceProvider services,
+        IWebHostEnvironment host,
         IApplicationBuilder app,
         IEndpointRouteBuilder routes
     )
@@ -73,6 +75,7 @@ class Tenant2HttpModule : IHttpModule
 {
     public void Register(
         IServiceProvider services,
+        IWebHostEnvironment host,
         IApplicationBuilder app,
         IEndpointRouteBuilder routes
     )

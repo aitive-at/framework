@@ -33,7 +33,7 @@ public abstract class WebApplication<TSelf>
     {
         foreach (var httpModule in host.Services.GetServices<IHttpModule>().PossiblyOrdered())
         {
-            httpModule.Register(host.Services, host, host);
+            httpModule.Register(host.Services, host.Environment, host, host);
         }
     }
 
