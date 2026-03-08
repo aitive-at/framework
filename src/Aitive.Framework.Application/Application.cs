@@ -62,6 +62,8 @@ public abstract class Application<TBuilder, THost, TSelf>
             builder.Services.AddSingleton<IApplicationDescription>(Description);
             builder.Services.AddSingleton<IPluginHost>(PluginHost);
 
+            OnConfigureServices(builder.Services);
+
             using var host = OnBuildHost(builder);
 
             Logger = host.Services.GetRequiredService<ILogger<TSelf>>();
@@ -87,6 +89,8 @@ public abstract class Application<TBuilder, THost, TSelf>
             exceptionContext.RethrowUnhandled();
         }
     }
+
+    protected virtual void OnConfigureServices(IServiceCollection services) { }
 
     protected virtual void OnSetupConfiguration(
         IApplicationDescription description,

@@ -36,4 +36,9 @@ public abstract class WebApplication<TSelf>
             httpModule.Register(host.Services, host, host);
         }
     }
+
+    protected override WebApplication OnBuildHost(WebApplicationBuilder builder)
+    {
+        return builder.Build();
+    }
 }
