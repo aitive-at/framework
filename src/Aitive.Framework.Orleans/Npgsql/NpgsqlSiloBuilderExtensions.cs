@@ -1,6 +1,9 @@
+using Aitive.Framework.YesSql;
+using Microsoft.Extensions.Configuration;
+
 namespace Aitive.Framework.Orleans.Npgsql;
 
-public static class SiloBuilderExtensions
+public static class NpgsqlSiloBuilderExtensions
 {
     private const string AdoNetInvariant = "Npgsql";
 
@@ -11,18 +14,22 @@ public static class SiloBuilderExtensions
         /// (clustering, persistence, reminders, streaming) and optionally creates the
         /// database schema from the embedded SQL scripts.
         /// </summary>
-        /// <param name="connectionString">The PostgreSQL connection string.</param>
+        /// <param name="connectionStringKey">The PostgreSQL connection string id in configuration.</param>
         /// <param name="configure">
         /// Optional callback to customise <see cref="NpgsqlSiloOptions"/>.
         /// Use this to disable auto-schema creation or individual providers.
         /// </param>
         /// <returns>The silo builder for chaining.</returns>
         public ISiloBuilder UseNpgsql(
-            string connectionString,
+            string connectionStringKey,
             Action<NpgsqlSiloOptions>? configure = null
         )
         {
-            ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+            ArgumentException.ThrowIfNullOrWhiteSpace(connectionStringKey);
+
+            var connectionString = siloBuilder.Configuration.GetRequiredConnectionString(
+                connectionStringKey
+            );
 
             var options = new NpgsqlSiloOptions();
             configure?.Invoke(options);

@@ -44,11 +44,11 @@ public sealed partial class NpgsqlDatabaseSetup
 
         if (await SchemaExistsAsync(connection, cancellationToken))
         {
-            LogSchemaAlreadyExists();
+            _logger.LogSchemaAlreadyExists();
             return;
         }
 
-        LogCreatingSchema();
+        _logger.LogCreatingSchema();
 
         var assembly = typeof(NpgsqlDatabaseSetup).Assembly;
 
@@ -63,7 +63,7 @@ public sealed partial class NpgsqlDatabaseSetup
                 await using var command = new NpgsqlCommand(sql, connection, transaction);
                 await command.ExecuteNonQueryAsync(cancellationToken);
 
-                LogScriptExecuted(resourceName);
+                _logger.LogScriptExecuted(resourceName);
             }
 
             await transaction.CommitAsync(cancellationToken);
@@ -74,7 +74,7 @@ public sealed partial class NpgsqlDatabaseSetup
             throw;
         }
 
-        LogSchemaCreated();
+        _logger.LogSchemaCreated();
     }
 
     private static async Task<bool> SchemaExistsAsync(
@@ -103,25 +103,4 @@ public sealed partial class NpgsqlDatabaseSetup
         using var reader = new StreamReader(stream);
         return await reader.ReadToEndAsync(cancellationToken);
     }
-
-    [LoggerMessage(
-        Level = LogLevel.Information,
-        Message = "Orleans PostgreSQL schema already exists, skipping creation"
-    )]
-    private partial void LogSchemaAlreadyExists();
-
-    [LoggerMessage(Level = LogLevel.Information, Message = "Creating Orleans PostgreSQL schema")]
-    private partial void LogCreatingSchema();
-
-    [LoggerMessage(
-        Level = LogLevel.Debug,
-        Message = "Executed Orleans schema script: {ResourceName}"
-    )]
-    private partial void LogScriptExecuted(string resourceName);
-
-    [LoggerMessage(
-        Level = LogLevel.Information,
-        Message = "Orleans PostgreSQL schema created successfully"
-    )]
-    private partial void LogSchemaCreated();
 }

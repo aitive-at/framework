@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
+    <ProjectReference Include="..\Aitive.Framework.YesSql\Aitive.Framework.YesSql.csproj" />
     <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
   </ItemGroup>
   <ItemGroup>
