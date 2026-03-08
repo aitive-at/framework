@@ -35,7 +35,7 @@ public sealed class WebRootPluginBindPointBuilder : IPluginBindPointBuilder
             );
         }
 
-        fileProviders.Add(oldWebRootFileProvider.Trace("DefaultWebRoot"));
+        fileProviders.Add(oldWebRootFileProvider);
 
         _hostEnvironment.WebRootFileProvider = new CompositeFileProvider(fileProviders);
 

@@ -17,6 +17,7 @@ public sealed partial class NpgsqlDatabaseSetup
     [
         "Aitive.Framework.Orleans.Npgsql.Scripts.PostgreSQL-Main.sql",
         "Aitive.Framework.Orleans.Npgsql.Scripts.PostgreSQL-Clustering.sql",
+        "Aitive.Framework.Orleans.Npgsql.Scripts.PostgreSQL-Clustering-3.7.0.sql",
         "Aitive.Framework.Orleans.Npgsql.Scripts.PostgreSQL-Persistence.sql",
         "Aitive.Framework.Orleans.Npgsql.Scripts.PostgreSQL-Reminders.sql",
         "Aitive.Framework.Orleans.Npgsql.Scripts.PostgreSQL-GrainDirectory.sql",

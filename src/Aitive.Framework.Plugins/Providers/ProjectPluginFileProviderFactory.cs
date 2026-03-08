@@ -27,11 +27,7 @@ internal sealed class ProjectPluginFileProviderFactory : IPluginFileProviderFact
             rootNamespace += $".{rootPath}";
         }
 
-        innerProviders.Add(
-            new EmbeddedFileProvider(_assembly, rootNamespace).Trace(
-                CreateId("Embedded", rootNamespace)
-            )
-        );
+        innerProviders.Add(new EmbeddedFileProvider(_assembly, rootNamespace));
 
         return new CompositeFileProvider(innerProviders);
     }
