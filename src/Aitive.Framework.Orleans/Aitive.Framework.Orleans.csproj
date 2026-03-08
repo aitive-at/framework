@@ -1,9 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" />
+    <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" />
+    <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" />
     <PackageReference Include="Microsoft.Orleans.Sdk" />
+    <PackageReference Include="Microsoft.Orleans.Streaming.AdoNet" />
+    <PackageReference Include="Npgsql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
     <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Npgsql\Scripts\" />
+    <EmbeddedResource Include="Npgsql\Scripts\**\*.sql" />
   </ItemGroup>
 </Project>
