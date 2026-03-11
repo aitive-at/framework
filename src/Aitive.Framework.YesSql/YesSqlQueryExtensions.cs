@@ -10,7 +10,7 @@ public static class YesSqlQueryExtensions
         where T : class
         where TIndex : IIndex
     {
-        public async Task<Optional<T>> FindOrNone(CancellationToken cancellationToken = default)
+        public async Task<Optional<T>> FirstOrNone(CancellationToken cancellationToken = default)
         {
             var result = await query.FirstOrDefaultAsync(cancellationToken);
 
