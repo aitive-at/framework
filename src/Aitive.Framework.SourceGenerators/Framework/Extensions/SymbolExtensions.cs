@@ -62,7 +62,13 @@ internal static class SymbolExtensions
         internal TypedValue ToTypedValue(
             string name,
             Accessibility accessibility = Accessibility.Public
-        ) => new TypedValue(name, new TypeName(symbol), accessibility.ToCsharpString());
+        ) =>
+            new TypedValue(
+                name,
+                new TypeName(symbol),
+                accessibility.ToCsharpString(),
+                symbol.TypeKind == TypeKind.Enum
+            );
 
         internal TypeDeclaration TypeDeclaration =>
             new TypeDeclaration(

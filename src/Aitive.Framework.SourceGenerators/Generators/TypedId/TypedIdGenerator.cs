@@ -25,6 +25,8 @@ public sealed class TypedIdAttribute
 
     public bool ImplementParsing { get; set; } = true;
 
+    public bool LowerCase { get; set; } = true;
+
     public string Separator { get; set; } = "/";
 }
 

@@ -56,6 +56,15 @@ namespace {{Model.Declaration.Namespace}};
     
     public override string ToString()
     {
+        {{ if Model.Attribute.LowerCase }} 
+            return ToStringCore().ToLowerInvariant();
+        {{ else }}
+            return ToStringCore();
+        {{ end }}
+    }
+    
+    private string ToStringCore()
+    {
         {{ if isSingle }}
             return {{Model.Values[0].Name}}.ToString();
         {{ else }}
@@ -110,6 +119,12 @@ namespace {{Model.Declaration.Namespace}};
                 {{ currentValue = Model.Values[i] }}
                 {{ if currentValue.Type.FullReferenceName == "System.String" }} 
                    var v{{i}} = parts[{{i}}];
+                {{ else if currentValue.IsEnum }}
+                   if( !System.Enum.TryParse<{{currentValue.Type.FullReferenceName}}>(parts[{{i}}],true,out var v{{i}}))
+                   {
+                        value = default;
+                        return false;
+                   }
                 {{ else }}
                    if ( !{{currentValue.Type.FullReferenceName}}.TryParse(parts[{{i}}],null,out var v{{i}}))
                    {

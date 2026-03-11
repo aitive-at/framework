@@ -4,6 +4,11 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
+    <ProjectReference
+      Include="..\..\src\Aitive.Framework.SourceGenerators\Aitive.Framework.SourceGenerators.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
   </ItemGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
