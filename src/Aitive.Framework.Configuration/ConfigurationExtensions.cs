@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace Aitive.Framework.YesSql;
+namespace Aitive.Framework.Configuration;
 
-public static class YesSqlConnectionStringExtensions
+public static class ConfigurationExtensions
 {
     extension(IConfiguration configuration)
     {

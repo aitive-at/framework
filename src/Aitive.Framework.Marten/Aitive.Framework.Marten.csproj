@@ -1,0 +1,10 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.Application\Aitive.Framework.Application.csproj" />
+    <ProjectReference Include="..\Aitive.Framework.Configuration\Aitive.Framework.Configuration.csproj" />
+    <ProjectReference Include="..\Aitive.Framework.DependencyInjection\Aitive.Framework.DependencyInjection.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Marten" />
+  </ItemGroup>
+</Project>

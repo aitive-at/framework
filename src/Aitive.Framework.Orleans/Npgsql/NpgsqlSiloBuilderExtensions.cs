@@ -1,5 +1,4 @@
-using Aitive.Framework.YesSql;
-using Microsoft.Extensions.Configuration;
+using Aitive.Framework.Configuration;
 
 namespace Aitive.Framework.Orleans.Npgsql;
 
