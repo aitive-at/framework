@@ -11,9 +11,12 @@ public static class ServiceCollectionExtensions
 {
     extension(IServiceCollection services)
     {
-        public void ConfigureMartenWithPlugins(IPluginHost pluginHost, string connectionStringKey)
+        public MartenServiceCollectionExtensions.MartenConfigurationExpression ConfigureMartenWithPlugins(
+            IPluginHost pluginHost,
+            string connectionStringKey
+        )
         {
-            services.AddMarten(
+            return services.AddMarten(
                 (serviceProvider) =>
                 {
                     var storeOptions = new StoreOptions();
