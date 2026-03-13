@@ -1,34 +1,37 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Aitive.Framework.Collections;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Aitive.Framework.Json;
 
 public static class JsonSerializerOptionsExtensions
 {
-    extension(JsonSerializerOptions)
-    {
-        public static JsonSerializerOptions CreateDefault(IEnumerable<JsonConverter> converters)
-        {
-            var newOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
-
-            newOptions.Converters.AddAll(converters);
-            newOptions.AllowOutOfOrderMetadataProperties = true;
-            newOptions.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-            newOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            newOptions.PropertyNameCaseInsensitive = true;
-            newOptions.RespectNullableAnnotations = true;
-            newOptions.WriteIndented = true;
-            newOptions.UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement;
-            newOptions.UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip;
-            newOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-
-            return newOptions;
-        }
-    }
-
     extension(JsonSerializerOptions options)
     {
+        public void ApplyDefaults()
+        {
+            options.AllowOutOfOrderMetadataProperties = true;
+            options.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options.PropertyNameCaseInsensitive = true;
+            options.RespectNullableAnnotations = true;
+            options.WriteIndented = true;
+            options.UnknownTypeHandling = JsonUnknownTypeHandling.JsonElement;
+            options.UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip;
+            options.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        }
+
+        public void ConfigureFromServices(IServiceProvider serviceProvider)
+        {
+            options.Converters.AddAll(serviceProvider.GetServices<JsonConverter>());
+
+            foreach (var module in serviceProvider.GetServices<IJsonModule>().PossiblyOrdered())
+            {
+                module.Configure(options);
+            }
+        }
+
         public JsonSerializerOptions WithConverters(
             JsonConverter converter,
             params JsonConverter[] converters
