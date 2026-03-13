@@ -135,6 +135,16 @@ public readonly struct Result<T, TError> : IResult<T, TError, Result<T, TError>>
 
 public static class Result
 {
+    public static Result<T, TError> Value<T, TError>(T value)
+    {
+        return new(value);
+    }
+
+    public static Result<T, TError> Error<T, TError>(TError error)
+    {
+        return new(error);
+    }
+
     public static bool IsResult(Type resultType) =>
         resultType.IsConstructedGenericType
         && resultType.GetGenericTypeDefinition() == typeof(Result<,>);
