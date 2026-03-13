@@ -16,16 +16,11 @@ public static class PluginHostExtensions
     {
         public IAsyncDisposable BindPlugins(IPluginHost pluginHost)
         {
-            var initialServices = new Dictionary<Type, object>()
-            {
-                { typeof(IConfiguration), builder.Configuration },
-                { typeof(IWebHostEnvironment), builder.Environment },
-                { typeof(ILoggingBuilder), builder.Logging },
-                { typeof(IMetricsBuilder), builder.Metrics },
-                { typeof(WebApplicationBuilder), builder },
-            };
+            var serviceBindPoint = builder.Services.BindPluginServices(
+                pluginHost,
+                builder.InitialServices
+            );
 
-            var serviceBindPoint = builder.Services.BindPluginServices(pluginHost, initialServices);
             var webRootBindPoint = builder.Environment.BindPluginWebRoot(pluginHost);
             var configurationBindPoint = builder.Services.BindPluginConfigurationOptions(
                 pluginHost,

@@ -6,11 +6,11 @@ using Orleans.Serialization;
 
 namespace Aitive.Framework.Orleans.Plugins;
 
-public sealed class OrleansPluginBindPointBuilder : IPluginBindPointBuilder
+public sealed class OrleansAssemblyPluginBindPointBuilder : IPluginBindPointBuilder
 {
     private readonly IServiceCollection _services;
 
-    public OrleansPluginBindPointBuilder(IServiceCollection services)
+    public OrleansAssemblyPluginBindPointBuilder(IServiceCollection services)
     {
         _services = services;
     }

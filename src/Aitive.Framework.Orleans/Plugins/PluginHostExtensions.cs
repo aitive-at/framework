@@ -7,18 +7,28 @@ public static class PluginHostExtensions
 {
     extension(IPluginHost pluginHost)
     {
-        public IPluginBindPoint BindPluginGrains(IServiceCollection services)
+        public IPluginBindPoint BindAssemblyPluginGrains(IServiceCollection services)
         {
-            var builder = new OrleansPluginBindPointBuilder(services);
+            var builder = new OrleansAssemblyPluginBindPointBuilder(services);
             return pluginHost.Bind(builder);
         }
-    }
 
-    extension(IServiceCollection services)
-    {
-        public IPluginBindPoint BindPluginGrains(IPluginHost pluginHost)
+        public IPluginBindPoint BindSiloBuilderPluginGrains(ISiloBuilder siloBuilder)
         {
-            return pluginHost.BindPluginGrains(services);
+            return pluginHost.BindSiloBuilderPluginGrains(
+                siloBuilder,
+                new Dictionary<Type, object>()
+            );
+        }
+
+        public IPluginBindPoint BindSiloBuilderPluginGrains(
+            ISiloBuilder siloBuilder,
+            IReadOnlyDictionary<Type, object> initialServices
+        )
+        {
+            return pluginHost.Bind(
+                new OrleansSiloBuilderPluginBindPointBuilder(siloBuilder, initialServices)
+            );
         }
     }
 }
