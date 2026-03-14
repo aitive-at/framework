@@ -4,6 +4,7 @@ using Aitive.Framework.Configuration.Plugins;
 using Aitive.Framework.Diagnostics.Exceptions;
 using Aitive.Framework.Diagnostics.Logging;
 using Aitive.Framework.Functional.Pipelines;
+using Aitive.Framework.Patterns;
 using Aitive.Framework.Plugins;
 using Aitive.Framework.Plugins.Hosts;
 using Microsoft.Extensions.Configuration;
@@ -66,7 +67,9 @@ public abstract class Application<TBuilder, THost, TSelf>
 
             using var host = OnBuildHost(builder);
 
+            Globals.Register(host.Services);
             Logger = host.Services.GetRequiredService<ILogger<TSelf>>();
+
             OnConfigureHost(host);
 
             // Execute startup tasks

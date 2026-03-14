@@ -1,9 +1,12 @@
-﻿using Aitive.Framework.Configuration;
+﻿using System.Text.Json;
+using Aitive.Framework.Configuration;
 using Aitive.Framework.Plugins;
 using Marten;
+using Marten.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Weasel.Core;
 
 namespace Aitive.Framework.Marten.Plugins;
 
@@ -13,13 +16,28 @@ public static class ServiceCollectionExtensions
     {
         public MartenServiceCollectionExtensions.MartenConfigurationExpression ConfigureMartenWithPlugins(
             IPluginHost pluginHost,
-            string connectionStringKey
+            string connectionStringKey,
+            bool useGlobalJsonSerializer = true
         )
         {
             return services.AddMarten(
                 (serviceProvider) =>
                 {
                     var storeOptions = new StoreOptions();
+
+                    if (useGlobalJsonSerializer)
+                    {
+                        storeOptions.Serializer(
+                            new SystemTextJsonSerializer(
+                                serviceProvider.GetRequiredService<JsonSerializerOptions>()
+                            )
+                            {
+                                Casing = Casing.CamelCase,
+                                EnumStorage = EnumStorage.AsString,
+                            }
+                        );
+                    }
+
                     var configurations = serviceProvider.GetServices<
                         IConfigureOptions<StoreOptions>
                     >();

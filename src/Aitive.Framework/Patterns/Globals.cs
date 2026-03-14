@@ -1,4 +1,6 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
+using Aitive.Framework.Functional;
 
 namespace Aitive.Framework.Patterns;
 
@@ -33,9 +35,39 @@ public static class Globals
 
     public static object Resolve(Type type)
     {
-        if (_entries.TryGetValue(type, out var result))
+        return TryResolve(type, out object? result)
+            ? result
+            : throw new InvalidOperationException($"Global not registered:  {type}");
+    }
+
+    public static T ResolveValueOrRegistered<T>(T? value)
+        where T : notnull
+    {
+        return value ?? Resolve<T>();
+    }
+
+    public static T ResolveValueOrRegistered<T>(Optional<T> value)
+        where T : notnull
+    {
+        return value ? value.Value : Resolve<T>();
+    }
+
+    public static T ResolveRegisteredOrDefault<T>(T value)
+        where T : notnull
+    {
+        if (TryResolve(typeof(T), out object? result))
         {
-            return result;
+            return (T)result;
+        }
+
+        return value;
+    }
+
+    public static bool TryResolve(Type type, [NotNullWhen(true)] out object? result)
+    {
+        if (_entries.TryGetValue(type, out result))
+        {
+            return true;
         }
 
         var serviceProvider = _serviceProvider;
@@ -43,13 +75,9 @@ public static class Globals
         if (serviceProvider != null)
         {
             result = serviceProvider.GetService(type);
-
-            if (result != null)
-            {
-                return result;
-            }
+            return result != null;
         }
 
-        throw new InvalidOperationException($"Global not registered:  {type}");
+        return false;
     }
 }
