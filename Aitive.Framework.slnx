@@ -25,6 +25,7 @@
   <Project Path="src/Aitive.Framework.Data/Aitive.Framework.Data.csproj" />
   <Project Path="src/Aitive.Framework.DependencyInjection/Aitive.Framework.DependencyInjection.csproj" />
   <Project Path="src/Aitive.Framework.EntityFrameworkCore/Aitive.Framework.EntityFrameworkCore.csproj" />
+  <Project Path="src/Aitive.Framework.Http/Aitive.Framework.Http.csproj" />
   <Project Path="src/Aitive.Framework.Interop/Aitive.Framework.Interop.csproj" />
   <Project Path="src/Aitive.Framework.Json/Aitive.Framework.Json.csproj" />
   <Project Path="src/Aitive.Framework.Marten/Aitive.Framework.Marten.csproj" />
