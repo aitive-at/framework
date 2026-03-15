@@ -179,7 +179,7 @@ public static class DataTransferHandlerExtensions
                 var readSize = (int)Math.Min(blockSize, remaining);
                 var memory = buffer.AsMemory(0, readSize);
 
-                var result = await handler.Read(memory, offset, cancellationToken);
+                var result = await handler.Read(file.Path, memory, offset, cancellationToken);
 
                 if (!result)
                 {
@@ -196,7 +196,16 @@ public static class DataTransferHandlerExtensions
                 var bytesRead = (int)result.Value.Length;
 
                 // Verify this chunk's integrity.
-                VerifyChunkHash(hashProvider, buffer, bytesRead, result.Value.Hash, offset);
+                if (result.Value.Hash)
+                {
+                    VerifyChunkHash(
+                        hashProvider,
+                        buffer,
+                        bytesRead,
+                        result.Value.Hash.Value,
+                        offset
+                    );
+                }
 
                 await fs.WriteAsync(buffer.AsMemory(0, bytesRead), cancellationToken);
 

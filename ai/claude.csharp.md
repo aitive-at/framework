@@ -13,7 +13,7 @@
   more such files for sub areas of the project if needed. Keep the actual csproj files small, e.g properties
   for nullability or targer framework can be inherited from the Directory.Build.props file
 * Use nullable reference types, and mark methods with nullability attributes/annotations as needed
-* Never ever use single line if/for/while loops where the statement to execute is just in
+* Never ever use single line if/for/while loops where the statement to execute is just indented
 * Perfer C# 14 Extension mebmers to older c# extension methods
 * Design Async APIs using Task or ValueTask where something can potentially trigger Async IO or where
   complex threading rendezvous behaviour is needed
