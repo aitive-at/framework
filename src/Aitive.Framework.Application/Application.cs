@@ -1,6 +1,7 @@
 ﻿using System.Runtime.ExceptionServices;
 using Aitive.Framework.Collections;
 using Aitive.Framework.Configuration.Plugins;
+using Aitive.Framework.Cryptography.Hashing;
 using Aitive.Framework.Diagnostics.Exceptions;
 using Aitive.Framework.Diagnostics.Logging;
 using Aitive.Framework.Functional.Pipelines;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IO;
 
 namespace Aitive.Framework.Application;
 
@@ -58,11 +60,6 @@ public abstract class Application<TBuilder, THost, TSelf>
             PluginHost = OnCreatePluginHost(builder);
 
             OnConfigureBuilder(builder);
-
-            builder.Services.AddSingleton<TSelf>((TSelf)this);
-            builder.Services.AddSingleton<IApplicationDescription>(Description);
-            builder.Services.AddSingleton<IPluginHost>(PluginHost);
-
             OnConfigureServices(builder.Services);
 
             using var host = OnBuildHost(builder);
@@ -93,7 +90,15 @@ public abstract class Application<TBuilder, THost, TSelf>
         }
     }
 
-    protected virtual void OnConfigureServices(IServiceCollection services) { }
+    protected virtual void OnConfigureServices(IServiceCollection services)
+    {
+        services.AddSingleton<TSelf>((TSelf)this);
+        services.AddSingleton<IApplicationDescription>(Description);
+        services.AddSingleton<IPluginHost>(PluginHost);
+
+        services.AddHashing();
+        services.AddSingleton<RecyclableMemoryStreamManager>();
+    }
 
     protected virtual void OnSetupConfiguration(
         IApplicationDescription description,

@@ -1,5 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
+using Aitive.Framework.Cryptography.Hashing;
+using Aitive.Framework.Cryptography.Hashing.Algorithms;
 using Aitive.Framework.Patterns;
 
 namespace Aitive.Framework.Json;
@@ -16,7 +18,7 @@ public static class TypedJsonDocumentExtensions
         {
             return JsonSerializer.Deserialize<T>(
                     stream,
-                    options ?? Globals.Resolve<JsonSerializerOptions>()
+                    Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
                 ) ?? throw new InvalidOperationException();
         }
 
@@ -29,14 +31,15 @@ public static class TypedJsonDocumentExtensions
         {
             return JsonSerializer.Deserialize<T>(
                     text,
-                    options ?? Globals.Resolve<JsonSerializerOptions>()
+                    Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
                 ) ?? throw new InvalidOperationException();
         }
 
         public static T Read(JsonElement json, JsonSerializerOptions? options = null)
         {
-            return json.Deserialize<T>(options ?? Globals.Resolve<JsonSerializerOptions>())
-                ?? throw new InvalidOperationException();
+            return json.Deserialize<T>(
+                    Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
+                ) ?? throw new InvalidOperationException();
         }
 
         public static T Read(JsonNode node, JsonSerializerOptions? options = null)
@@ -55,7 +58,10 @@ public static class TypedJsonDocumentExtensions
         public static async Task<T> ReadAsync(Stream stream, JsonSerializerOptions? options = null)
         {
             var result = await JsonSerializer
-                .DeserializeAsync<T>(stream, options ?? Globals.Resolve<JsonSerializerOptions>())
+                .DeserializeAsync<T>(
+                    stream,
+                    Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
+                )
                 .ConfigureAwait(false);
             return result ?? throw new InvalidOperationException();
         }
@@ -76,7 +82,7 @@ public static class TypedJsonDocumentExtensions
                 stream,
                 value,
                 type,
-                options ?? Globals.Resolve<JsonSerializerOptions>()
+                Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
             );
         }
 
@@ -92,7 +98,7 @@ public static class TypedJsonDocumentExtensions
                 stream,
                 value,
                 type,
-                options ?? Globals.Resolve<JsonSerializerOptions>()
+                Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
             );
         }
 
@@ -117,7 +123,7 @@ public static class TypedJsonDocumentExtensions
             return JsonSerializer.SerializeToNode(
                     value,
                     type,
-                    options ?? Globals.Resolve<JsonSerializerOptions>()
+                    Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
                 ) ?? throw new InvalidOperationException();
         }
 
@@ -131,7 +137,7 @@ public static class TypedJsonDocumentExtensions
             return JsonSerializer.SerializeToElement(
                 value,
                 type,
-                options ?? Globals.Resolve<JsonSerializerOptions>()
+                Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
             );
         }
 
@@ -145,8 +151,23 @@ public static class TypedJsonDocumentExtensions
             return JsonSerializer.Serialize(
                 value,
                 type,
-                options ?? Globals.Resolve<JsonSerializerOptions>()
+                Globals.ResolveValueOrRegistered<JsonSerializerOptions>(options)
             );
+        }
+
+        public Sha256Value HashJsonToSha256(
+            IHashProvider<Sha256Value>? hashProvider,
+            JsonSerializerOptions? options = null,
+            bool useRuntimeType = true
+        )
+        {
+            using var hashBuilder = (
+                Globals.ResolveValueOrRegistered(hashProvider)
+            ).CreateBuilder();
+
+            hashBuilder.Write(value.ToJsonString(options, useRuntimeType));
+
+            return hashBuilder.Build();
         }
     }
 }

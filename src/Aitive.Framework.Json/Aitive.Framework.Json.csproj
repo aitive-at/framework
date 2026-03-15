@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <ProjectReference Include="..\Aitive.Framework.Cryptography\Aitive.Framework.Cryptography.csproj" />
     <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
   </ItemGroup>
 </Project>
