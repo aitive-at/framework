@@ -6,12 +6,11 @@ namespace Aitive.Framework.Data.Transfer;
 
 /// <summary>
 /// A thread-safe, disposable queue that runs data transfers in the background
-/// with bounded concurrency. All transfers use the <see cref="IDataTransferHandler"/>
-/// supplied at construction time.
+/// with bounded concurrency. Each transfer uses its own <see cref="IDataTransferHandler"/>
+/// supplied when the transfer is enqueued.
 /// </summary>
 public sealed class DataTransferQueue : IAsyncDisposable
 {
-    private readonly IDataTransferHandler _handler;
     private readonly IDataTransferQueueListener _listener;
     private readonly IHashProvider<Sha256Value> _hashProvider;
     private readonly SemaphoreSlim _semaphore;
@@ -22,18 +21,15 @@ public sealed class DataTransferQueue : IAsyncDisposable
     private volatile bool _disposed;
 
     public DataTransferQueue(
-        IDataTransferHandler handler,
         IDataTransferQueueListener listener,
         IHashProvider<Sha256Value> hashProvider,
         int maxConcurrentTransfers = 4
     )
     {
-        ArgumentNullException.ThrowIfNull(handler);
         ArgumentNullException.ThrowIfNull(listener);
         ArgumentNullException.ThrowIfNull(hashProvider);
         ArgumentOutOfRangeException.ThrowIfLessThan(maxConcurrentTransfers, 1);
 
-        _handler = handler;
         _listener = listener;
         _hashProvider = hashProvider;
         _semaphore = new SemaphoreSlim(maxConcurrentTransfers, maxConcurrentTransfers);
@@ -43,12 +39,14 @@ public sealed class DataTransferQueue : IAsyncDisposable
     /// Enqueues a transfer. It will start once a concurrency slot is available.
     /// </summary>
     public Guid Add(
+        IDataTransferHandler handler,
         DataTransferFile file,
         string targetPath,
         Optional<DataTransferOptions> options = default
     )
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
+        ArgumentNullException.ThrowIfNull(handler);
         ArgumentNullException.ThrowIfNull(file);
         ArgumentException.ThrowIfNullOrWhiteSpace(targetPath);
 
@@ -59,6 +57,7 @@ public sealed class DataTransferQueue : IAsyncDisposable
         var tracked = new TrackedTransfer
         {
             Id = id,
+            Handler = handler,
             File = file,
             TargetPath = targetPath,
             Options = resolvedOptions,
@@ -222,7 +221,7 @@ public sealed class DataTransferQueue : IAsyncDisposable
                 }),
             };
 
-            await _handler.TransferToFileAsync(
+            await tracked.Handler.TransferToFileAsync(
                 _hashProvider,
                 tracked.File,
                 tracked.TargetPath,
@@ -260,6 +259,7 @@ public sealed class DataTransferQueue : IAsyncDisposable
     private sealed class TrackedTransfer
     {
         public required Guid Id { get; init; }
+        public required IDataTransferHandler Handler { get; init; }
         public required DataTransferFile File { get; init; }
         public required string TargetPath { get; init; }
         public required DataTransferOptions Options { get; init; }

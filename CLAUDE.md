@@ -21,9 +21,11 @@ No special setup beyond having .NET SDK 10.0+ installed. `dotnet build` from roo
 ## Directory Layout
 
 ```
-src/          Source projects: Aitive.Framework.* (flat, one dir per module)
-tests/        Test projects mirroring src/ layout with .Tests suffix
+src/          Source projects AND test projects (flat, one dir per module)
+              Test projects use .Tests suffix (e.g., Aitive.Framework.Slang.Tests)
+              Note: there is no separate tests/ directory
 samples/      Sample applications demonstrating framework usage
+templates/    Project scaffolding templates (library, test, solution)
 ai/           AI coding conventions (claude.csharp.md)
 specs/        Feature specifications (markdown)
 plans/        Implementation plans (markdown)
@@ -62,6 +64,8 @@ A plugin declares itself via `[assembly: Plugin("id", "version")]` in a manifest
 
 Configuration loads in priority: base JSON → environment JSON → env vars → CLI args.
 
+**`Globals`** — a static service locator (`ConcurrentDictionary`-backed) registered in step 5 with the host's `IServiceProvider`. Used for service resolution in contexts where DI isn't available (native interop, third-party callbacks). Access via `Globals.Register<T>()` / `Globals.Resolve<T>()`.
+
 ### Key Extension Points
 
 - **IServiceModule** — single-method interface (`Register(IServiceCollection)`) for declaring DI registrations. Discovered automatically from plugins by `ServicePluginBindPointBuilder`.
@@ -95,14 +99,14 @@ Each `Aitive.Framework.*` project is a focused module. Key ones:
 | Module | Purpose |
 |--------|---------|
 | `Framework` | Core utilities: collections, reflection, functional types, patterns |
-| `Framework.Slang` | Core language features and extensions |
+| `Framework.Slang` | Placeholder module (currently empty, depends on Interop) |
 | `Framework.Application` | Application lifecycle, startup tasks, logging providers |
 | `Framework.Plugins` | Plugin discovery, loading, resolution, binding |
 | `Framework.DependencyInjection` | `IServiceModule` registration pattern |
 | `Framework.Configuration` | `[ConfigurationOptions]` attribute-driven config binding |
 | `Framework.AspNetCore` | `WebApplication<TSelf>`, `IHttpModule` route binding |
 | `Framework.Tenancy` | Multi-tenant routing and resolution |
-| `Framework.Data` | `IQueryOperation`, query result abstractions |
+| `Framework.Data` | Query abstractions, `DataTransferQueue` (background transfers with integrity verification) |
 | `Framework.Orleans` | Orleans grain integration, Npgsql storage setup |
 | `Framework.SourceGenerators` | C# source generators (`TypedId`, `ApplicationDescription`) |
 | `Framework.Versioning` | Semantic versioning (`SemVersion`, `SemVersionRange`, range parsers) |
@@ -114,9 +118,9 @@ Each `Aitive.Framework.*` project is a focused module. Key ones:
 | `Framework.YesSql` | YesSql document database integration |
 | `Framework.Serilog` | Serilog logging provider |
 | `Framework.Autofac` | Autofac DI container integration |
-| `Framework.Http` | HTTP utilities (stub) |
-| `Framework.Vcs` | Version control abstractions (foundational) |
-| `Framework.Cli` | CLI tooling (stub) |
+| `Framework.Http` | `HttpDataTransferHandler` — HTTP range-request transfers with RFC 9530 digest verification |
+| `Framework.Vcs` | Version control abstractions (foundational, tree types only) |
+| `Framework.Cli` | CLI tooling (empty placeholder) |
 
 ## Coding Conventions
 
