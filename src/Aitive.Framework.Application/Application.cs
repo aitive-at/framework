@@ -39,6 +39,8 @@ public abstract class Application<TBuilder, THost, TSelf>
 
     public async Task Run(CancellationToken cancellationToken = default)
     {
+        // Builder creation is not logged or tracked, this will lead to a raw exception, but there is no better
+        // solution as of yet
         var builder = OnCreateBuilder();
         var exceptionHandler = Options.ExceptionHandlers.Compile();
         using var loggingContext = Options.LoggingProvider.CreateBoostrapContext(
