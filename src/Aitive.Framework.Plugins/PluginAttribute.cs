@@ -25,7 +25,7 @@ public sealed class PluginAttribute : System.Attribute
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
 public sealed class PluginDependencyAttribute : System.Attribute
 {
-    public PluginDependencyAttribute(string id, string versionRange)
+    public PluginDependencyAttribute(string id, string? versionRange = null)
     {
         Id = id;
         VersionRange = versionRange;
@@ -33,7 +33,7 @@ public sealed class PluginDependencyAttribute : System.Attribute
 
     public string Id { get; }
 
-    public string VersionRange { get; }
+    public string? VersionRange { get; }
 }
 
 [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]

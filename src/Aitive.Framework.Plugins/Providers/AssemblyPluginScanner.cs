@@ -29,7 +29,10 @@ internal static class AssemblyPluginScanner
 
         foreach (var dependencyAttribute in dependencyAttributes)
         {
-            if (!SemVersionRange.TryParse(dependencyAttribute.VersionRange, out var versionRange))
+            if (
+                dependencyAttribute.VersionRange == null
+                || !SemVersionRange.TryParse(dependencyAttribute.VersionRange, out var versionRange)
+            )
             {
                 versionRange = _defaultVersionRange;
             }
