@@ -19,13 +19,10 @@ public sealed class DefaultPluginHostBuilder : IPluginHostBuilder
     private readonly ILogger _logger;
 
     public DefaultPluginHostBuilder(ILogger logger)
-        : this(new PluginResolver(), logger) { }
-
-    public DefaultPluginHostBuilder(PluginResolver resolver, ILogger logger)
     {
         _availablePlugins = new Dictionary<PluginId, IReadOnlyList<PluginManifest>>();
         _pluginProviders = new Dictionary<PluginVersionId, IPluginProvider>();
-        _resolver = resolver;
+        _resolver = new PluginResolver();
         _logger = logger;
     }
 
