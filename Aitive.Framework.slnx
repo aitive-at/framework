@@ -20,6 +20,7 @@
   <Project Path="src/Aitive.Framework.Application/Aitive.Framework.Application.csproj" />
   <Project Path="src/Aitive.Framework.AspNetCore/Aitive.Framework.AspNetCore.csproj" />
   <Project Path="src/Aitive.Framework.Autofac/Aitive.Framework.Autofac.csproj" />
+  <Project Path="src/Aitive.Framework.Caching/Aitive.Framework.Caching.csproj" />
   <Project Path="src/Aitive.Framework.Configuration/Aitive.Framework.Configuration.csproj" />
   <Project Path="src/Aitive.Framework.Cryptography/Aitive.Framework.Cryptography.csproj" />
   <Project Path="src/Aitive.Framework.Data/Aitive.Framework.Data.csproj" />

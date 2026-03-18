@@ -1,23 +1,32 @@
 ﻿using Aitive.Framework.Collections;
 using Aitive.Framework.Plugins.Resolution;
 using Aitive.Framework.Versioning;
+using Microsoft.Extensions.Logging;
 
 namespace Aitive.Framework.Plugins.Hosts;
+
+public static partial class LogMessages
+{
+    [LoggerMessage(Level = LogLevel.Information, Message = "Loading plugin: {PluginId}")]
+    public static partial void LoadingPlugin(this ILogger logger, PluginVersionId pluginId);
+}
 
 public sealed class DefaultPluginHostBuilder : IPluginHostBuilder
 {
     private readonly Dictionary<PluginId, IReadOnlyList<PluginManifest>> _availablePlugins;
     private readonly Dictionary<PluginVersionId, IPluginProvider> _pluginProviders;
     private readonly PluginResolver _resolver;
+    private readonly ILogger _logger;
 
-    public DefaultPluginHostBuilder()
-        : this(new PluginResolver()) { }
+    public DefaultPluginHostBuilder(ILogger logger)
+        : this(new PluginResolver(), logger) { }
 
-    public DefaultPluginHostBuilder(PluginResolver resolver)
+    public DefaultPluginHostBuilder(PluginResolver resolver, ILogger logger)
     {
         _availablePlugins = new Dictionary<PluginId, IReadOnlyList<PluginManifest>>();
         _pluginProviders = new Dictionary<PluginVersionId, IPluginProvider>();
         _resolver = resolver;
+        _logger = logger;
     }
 
     public IReadOnlyDictionary<PluginId, IReadOnlyList<PluginManifest>> AvailablePlugins =>
@@ -52,9 +61,12 @@ public sealed class DefaultPluginHostBuilder : IPluginHostBuilder
         foreach (var manifest in result.OrderedManifests)
         {
             var provider = _pluginProviders[manifest.VersionId];
-            loadedPlugins.Add(provider.Load(manifest.VersionId));
+            _logger.LoadingPlugin(manifest.VersionId);
+
+            var plugin = provider.Load(manifest.VersionId);
+            loadedPlugins.Add(plugin);
         }
 
-        return new DefaultPluginHost(loadedPlugins);
+        return new DefaultPluginHost(loadedPlugins, _logger);
     }
 }
