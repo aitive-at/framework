@@ -39,15 +39,17 @@ public abstract class Application<TBuilder, THost, TSelf>
 
     public async Task Run(CancellationToken cancellationToken = default)
     {
+        var builder = OnCreateBuilder();
         var exceptionHandler = Options.ExceptionHandlers.Compile();
-        using var loggingContext = Options.LoggingProvider.CreateBoostrapContext(Description);
+        using var loggingContext = Options.LoggingProvider.CreateBoostrapContext(
+            builder.Environment,
+            Description
+        );
 
         Logger = loggingContext.Logger;
 
         try
         {
-            var builder = OnCreateBuilder();
-
             OnSetupConfiguration(Description, builder.Environment, builder.Configuration);
 
             Options.LoggingProvider.ConfigureLogging(

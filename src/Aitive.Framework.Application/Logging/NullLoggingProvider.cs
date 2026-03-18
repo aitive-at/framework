@@ -15,7 +15,10 @@ public sealed class NullLoggingContext : ILoggingContext
 
 public sealed class NullLoggingProvider : ILoggingProvider
 {
-    public ILoggingContext CreateBoostrapContext(IApplicationDescription applicationDescription)
+    public ILoggingContext CreateBoostrapContext(
+        IHostEnvironment environment,
+        IApplicationDescription applicationDescription
+    )
     {
         return new NullLoggingContext();
     }

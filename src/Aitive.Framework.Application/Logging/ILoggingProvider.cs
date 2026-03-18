@@ -6,7 +6,10 @@ namespace Aitive.Framework.Application.Logging;
 
 public interface ILoggingProvider
 {
-    ILoggingContext CreateBoostrapContext(IApplicationDescription applicationDescription);
+    ILoggingContext CreateBoostrapContext(
+        IHostEnvironment environment,
+        IApplicationDescription applicationDescription
+    );
 
     void ConfigureLogging(
         IApplicationDescription applicationDescription,

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using Serilog.Events;
 using Serilog.Extensions.Logging;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -11,10 +12,13 @@ namespace Aitive.Framework.Serilog;
 
 public class SerilogLoggingProvider : ILoggingProvider
 {
-    public ILoggingContext CreateBoostrapContext(IApplicationDescription applicationDescription)
+    public ILoggingContext CreateBoostrapContext(
+        IHostEnvironment environment,
+        IApplicationDescription applicationDescription
+    )
     {
         var configuration = new LoggerConfiguration();
-        ApplyDefaultConfiguration(applicationDescription, configuration);
+        ApplyDefaultConfiguration(environment, applicationDescription, configuration);
 
         Log.Logger = configuration.CreateLogger();
 
@@ -34,7 +38,11 @@ public class SerilogLoggingProvider : ILoggingProvider
             (
                 (provider, loggerConfiguration) =>
                 {
-                    ApplyDefaultConfiguration(applicationDescription, loggerConfiguration);
+                    ApplyDefaultConfiguration(
+                        environment,
+                        applicationDescription,
+                        loggerConfiguration
+                    );
                     loggerConfiguration.ReadFrom.Services(provider);
                 }
             )
@@ -47,11 +55,17 @@ public class SerilogLoggingProvider : ILoggingProvider
     }
 
     protected virtual void ApplyDefaultConfiguration(
+        IHostEnvironment environment,
         IApplicationDescription applicationDescription,
         LoggerConfiguration loggerConfiguration
     )
     {
+        var minLevel = environment.IsDevelopment()
+            ? LogEventLevel.Debug
+            : LogEventLevel.Information;
+
         loggerConfiguration
+            .MinimumLevel.Is(minLevel)
             .WriteTo.Console()
             .WriteTo.File(GetLogFilename(applicationDescription))
             .Enrich.FromLogContext();
