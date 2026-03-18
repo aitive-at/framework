@@ -20,6 +20,8 @@ public sealed record OptionalReference<T>(T? Value, bool HasValue)
 
     public static OptionalReference<T> FromOptional(Optional<T> optional)
     {
-        return new OptionalReference<T>(optional.Value, optional.HasValue);
+        return optional
+            ? new OptionalReference<T>(optional.Value, true)
+            : new OptionalReference<T>(null, false);
     }
 }

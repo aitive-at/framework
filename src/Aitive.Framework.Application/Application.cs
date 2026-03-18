@@ -16,6 +16,12 @@ using Microsoft.IO;
 
 namespace Aitive.Framework.Application;
 
+public static partial class LogMessages
+{
+    [LoggerMessage(LogLevel.Information, "Executing startup task: {taskName}")]
+    public static partial void ExecutingStartupTask(this ILogger logger, string taskName);
+}
+
 public abstract class Application<TBuilder, THost, TSelf>
     where TBuilder : IHostApplicationBuilder
     where THost : IHost
@@ -80,6 +86,7 @@ public abstract class Application<TBuilder, THost, TSelf>
                     .PossiblyOrdered()
             )
             {
+                Logger.ExecutingStartupTask(startupTask.GetType().Name);
                 await startupTask.Execute(cancellationToken);
             }
 
