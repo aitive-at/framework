@@ -5,6 +5,7 @@ using Aitive.Framework.Cryptography.Hashing;
 using Aitive.Framework.Diagnostics.Exceptions;
 using Aitive.Framework.Diagnostics.Logging;
 using Aitive.Framework.Functional.Pipelines;
+using Aitive.Framework.Json;
 using Aitive.Framework.Patterns;
 using Aitive.Framework.Plugins;
 using Aitive.Framework.Plugins.Hosts;
@@ -109,6 +110,9 @@ public abstract class Application<TBuilder, THost, TSelf>
 
         services.AddHashing();
         services.AddSingleton<RecyclableMemoryStreamManager>();
+
+        services.AddJsonSerializerOptions();
+        services.AddDefaultJsonConverters();
     }
 
     protected virtual void OnSetupConfiguration(

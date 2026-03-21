@@ -19,7 +19,9 @@ public class IdentifiedDictionaryJsonConverter<TDict, TId, TValue> : JsonConvert
     )
     {
         if (reader.TokenType != JsonTokenType.StartObject)
+        {
             throw new JsonException("Expected StartObject");
+        }
 
         var dict = new Dictionary<TId, TValue>();
 
