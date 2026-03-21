@@ -22,12 +22,23 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Scriban" IncludeAssets="Build" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" />
+    <PackageReference
+      Include="System.Threading.Tasks.Extensions"
+      GeneratePathProperty="true"
+      PrivateAssets="all"
+    />
+    <PackageReference Include="System.Text.Json" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
     <None
       Include="$(OutputPath)\$(AssemblyName).dll"
+      Pack="true"
+      PackagePath="analyzers/dotnet/cs"
+      Visible="false"
+    />
+    <None
+      Include="$(PkgSystem_Text_Json)\lib\netstandard2.0\System.Text.Json.dll"
       Pack="true"
       PackagePath="analyzers/dotnet/cs"
       Visible="false"
