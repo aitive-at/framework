@@ -148,7 +148,7 @@ namespace {{Model.Declaration.Namespace}};
     }
 }
 
-{{ if GenerateJsonConverter }} 
+{{ if Model.GenerateJsonConverter }} 
 
 {{visibility}} sealed class {{name}}JsonConverter : JsonConverter<{{name}}>
 {
@@ -177,7 +177,7 @@ namespace {{Model.Declaration.Namespace}};
 }
 {{ end }}
 
-{{ if GenerateTypeConverter }}
+{{ if Model.GenerateTypeConverter }}
 public class {{name}}TypeConverter : TypeConverter
 {
     public override bool CanConvertFrom(ITypeDescriptorContext? context,
