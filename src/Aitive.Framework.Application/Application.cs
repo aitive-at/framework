@@ -107,12 +107,6 @@ public abstract class Application<TBuilder, THost, TSelf>
         services.AddSingleton<TSelf>((TSelf)this);
         services.AddSingleton<IApplicationDescription>(Description);
         services.AddSingleton<IPluginHost>(PluginHost);
-
-        services.AddHashing();
-        services.AddSingleton<RecyclableMemoryStreamManager>();
-
-        services.AddJsonSerializerOptions();
-        services.AddDefaultJsonConverters();
     }
 
     protected virtual void OnSetupConfiguration(
