@@ -52,5 +52,7 @@
   <ItemGroup>
     <None Remove="Generators\TypedId\TypedId.scriban" />
     <EmbeddedResource Include="Generators\TypedId\TypedId.scriban" />
+    <None Remove="Generators\OrleansSurrogate\OrleansSurrogate.scriban" />
+    <EmbeddedResource Include="Generators\OrleansSurrogate\OrleansSurrogate.scriban" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.CodeAnalysis;
 
 namespace Aitive.Framework.SourceGenerators.Framework.Dom.Attributes;
 
@@ -243,7 +244,7 @@ public static class AttributeDefinitionBuilder
             return AttributeParameterType.Object;
         }
 
-        if (type == typeof(Type))
+        if (type == typeof(INamedTypeSymbol))
         {
             return AttributeParameterType.Type();
         }

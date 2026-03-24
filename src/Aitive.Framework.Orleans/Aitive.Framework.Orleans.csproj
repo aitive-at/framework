@@ -11,6 +11,11 @@
     <ProjectReference Include="..\Aitive.Framework.Configuration\Aitive.Framework.Configuration.csproj" />
     <ProjectReference Include="..\Aitive.Framework.Plugins\Aitive.Framework.Plugins.csproj" />
     <ProjectReference Include="..\Aitive.Framework\Aitive.Framework.csproj" />
+    <ProjectReference
+      Include="..\Aitive.Framework.SourceGenerators\Aitive.Framework.SourceGenerators.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"
+    />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Npgsql\Scripts\" />

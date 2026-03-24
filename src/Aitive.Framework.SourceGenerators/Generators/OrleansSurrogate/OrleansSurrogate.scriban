@@ -1,0 +1,80 @@
+#nullable enable
+
+using Orleans;
+
+namespace {{Model.SurrogateDeclaration.Namespace}};
+
+{{ visibility = Model.SurrogateDeclaration.Accessibility }}
+{{ surrogateName = Model.SurrogateName }}
+{{ targetGlobal = Model.TargetTypeGlobalName }}
+{{ converterName = Model.ConverterName }}
+{{ typeParams = Model.TypeParameters }}
+{{ typeConstraints = Model.TypeParameterConstraints }}
+
+/// <summary>
+/// Auto-generated Orleans serialization surrogate for <see cref="{{targetGlobal}}"/>
+/// </summary>
+[GenerateSerializer]
+{{visibility}} partial struct {{surrogateName}}
+{
+    {{- for prop in Model.AllProperties }}
+    [Id({{for.index}})]
+    public required {{prop.TypeGlobalName}} {{prop.Name}} { get; set; }
+    {{- end }}
+}
+
+[RegisterConverter]
+{{visibility}} sealed class {{converterName}}
+    : IConverter<{{targetGlobal}}, {{surrogateName}}>
+    {{- if typeConstraints }}
+    {{typeConstraints}}
+    {{- end }}
+{
+    public {{targetGlobal}} ConvertFromSurrogate(in {{surrogateName}} surrogate)
+    {
+        {{- if Model.ConstructorProperties.size > 0 || Model.InitOnlyProperties.size > 0 }}
+
+        var result = new {{targetGlobal}}(
+            {{- for prop in Model.ConstructorProperties }}
+            {{prop.ConstructorParamName}}: surrogate.{{prop.Name}}{{if !for.last}},{{end}}
+            {{- end }}
+        )
+        {{- if Model.InitOnlyProperties.size > 0 }}
+        {
+            {{- for prop in Model.InitOnlyProperties }}
+            {{prop.Name}} = surrogate.{{prop.Name}},
+            {{- end }}
+        };
+        {{- else }}
+        ;
+        {{- end }}
+
+        {{- else }}
+
+        var result = new {{targetGlobal}}();
+
+        {{- end }}
+
+        {{- for prop in Model.MutableProperties }}
+        result.{{prop.MatchingPropertyName}} = surrogate.{{prop.Name}};
+        {{- end }}
+
+        return result;
+    }
+
+    public {{surrogateName}} ConvertToSurrogate(in {{targetGlobal}} value)
+    {
+        return new {{surrogateName}}
+        {
+            {{- for prop in Model.AllProperties }}
+            {{- if prop.HasMatchingReadableProperty }}
+            {{prop.Name}} = value.{{prop.MatchingPropertyName}},
+            {{- else }}
+            {{prop.Name}} = default,
+            {{- end }}
+            {{- end }}
+        };
+    }
+}
+
+#nullable disable
