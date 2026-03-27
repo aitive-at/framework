@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageVersion Include="FastExpressionCompiler" Version="5.3.0" />
-    <PackageVersion Include="Marten" Version="8.26.0" />
+    <PackageVersion Include="Marten" Version="8.26.2" />
     <PackageVersion Include="Microsoft.AspNetCore.Components" Version="10.0.3" />
     <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
     <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
@@ -42,13 +42,13 @@
     <PackageVersion Include="Microsoft.Orleans.Streaming.AdoNet" Version="10.0.1-alpha.1" />
     <PackageVersion Include="Npgsql" Version="10.0.2" />
     <PackageVersion Include="PolySharp" Version="1.15.0" />
-    <PackageVersion Include="Scriban" Version="6.6.0" />
+    <PackageVersion Include="Scriban" Version="7.0.5" />
     <PackageVersion Include="Serilog" Version="4.3.1" />
     <PackageVersion Include="Serilog.Extensions.Hosting" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.1.1" />
     <PackageVersion Include="Serilog.Sinks.File" Version="7.0.0" />
     <PackageVersion Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
-    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+    <PackageVersion Include="System.Text.Json" Version="10.0.5" />
     <!-- This 8.0.5 is synced with scriban -->
     <PackageVersion Include="Nerdbank.GitVersioning" Version="3.9.50" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.3.0" />

@@ -29,14 +29,14 @@ public sealed class TemplateEngine
 
         var path = _templateLoader.GetPath(_dummyContext, sourceSpan, name);
 
-        var sourceCode = _templateLoader.Load(_dummyContext, sourceSpan, path);
+        var sourceCode = _templateLoader.Load(_dummyContext, sourceSpan, path ?? name);
 
         if (sourceCode == null)
         {
             throw new FileNotFoundException($"Could not find template: {name}");
         }
 
-        return ParseTemplate(path, sourceCode);
+        return ParseTemplate(path ?? name, sourceCode);
     }
 
     private Template ParseTemplate(string filename, string sourceCode)
