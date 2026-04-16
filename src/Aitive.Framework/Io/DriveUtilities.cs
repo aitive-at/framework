@@ -4,7 +4,7 @@ public static class DriveUtilities
 {
     public static long GetAvailableFreeBytes(string path)
     {
-        var fullPath = Path.GetFullPath(path);
+        var fullPath = System.IO.Path.GetFullPath(path);
 
         // Pick the drive with the longest matching root name.
         // This correctly handles nested mounts on Linux (e.g. /mnt/data vs /).
