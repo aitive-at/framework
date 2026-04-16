@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Aitive.Framework.Collections;
+using Aitive.Framework.Io;
 using Aitive.Framework.Json.Converters;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,6 +31,7 @@ public static class ServiceCollectionExtensions
             services.AddJsonConverter<ResultJsonConverterFactory>();
             services.AddJsonConverter<LanguageCultureInfoJsonConverter>();
             services.AddJsonConverter<CountryRegionInfoJsonConverter>();
+            services.AddJsonConverter<PathJsonConverter>();
         }
 
         public IServiceCollection AddJsonConverter<T>()
