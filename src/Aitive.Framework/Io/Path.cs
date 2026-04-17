@@ -82,6 +82,26 @@ public readonly partial record struct Path(string Value)
         return System.IO.Path.ChangeExtension(Value, extension);
     }
 
+    public bool EnsureDirectoryExists()
+    {
+        var directory = new DirectoryInfo(Value);
+
+        if (directory.Exists)
+        {
+            return true;
+        }
+
+        try
+        {
+            directory.Create();
+            return true;
+        }
+        catch (IOException)
+        {
+            return false;
+        }
+    }
+
     public IEnumerable<Path> EnumerateFiles(
         string pattern = "*.*",
         bool recursive = false,
