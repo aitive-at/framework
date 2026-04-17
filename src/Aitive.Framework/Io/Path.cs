@@ -8,8 +8,10 @@ public readonly partial record struct Path(string Value)
 {
     public bool IsFile => new FileInfo(Value).Exists;
     public bool IsDirectory => new DirectoryInfo(Value).Exists;
-
     public bool Exists => System.IO.Path.Exists(Value);
+
+    public DirectoryInfo DirectoryInfo => new DirectoryInfo(Value);
+    public FileInfo FileInfo => new FileInfo(Value);
 
     public static Path operator /(Path a, string b)
     {
@@ -78,5 +80,46 @@ public readonly partial record struct Path(string Value)
     public Path WithExtension(string extension)
     {
         return System.IO.Path.ChangeExtension(Value, extension);
+    }
+
+    public IEnumerable<Path> EnumerateFiles(
+        string pattern = "*.*",
+        bool recursive = false,
+        bool ignoreInaccessible = true,
+        bool returnSpecial = true
+    )
+    {
+        return Directory
+            .EnumerateFiles(
+                Value,
+                pattern,
+                new EnumerationOptions()
+                {
+                    RecurseSubdirectories = recursive,
+                    IgnoreInaccessible = ignoreInaccessible,
+                    ReturnSpecialDirectories = returnSpecial,
+                }
+            )
+            .Select(o => new Path(o));
+    }
+
+    public IEnumerable<Path> EnumerateChildDirectories(
+        bool recursive = false,
+        bool ignoreInaccessible = true,
+        bool returnSpecial = true
+    )
+    {
+        return Directory
+            .EnumerateDirectories(
+                Value,
+                "*",
+                new EnumerationOptions()
+                {
+                    RecurseSubdirectories = recursive,
+                    IgnoreInaccessible = ignoreInaccessible,
+                    ReturnSpecialDirectories = returnSpecial,
+                }
+            )
+            .Select(o => new Path(o));
     }
 }
