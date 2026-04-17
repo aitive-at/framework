@@ -123,7 +123,7 @@ public readonly partial record struct Path(string Value)
             .Select(o => new Path(o));
     }
 
-    public IEnumerable<Path> EnumerateChildDirectories(
+    public IEnumerable<Path> EnumerateDirectories(
         bool recursive = false,
         bool ignoreInaccessible = true,
         bool returnSpecial = true
