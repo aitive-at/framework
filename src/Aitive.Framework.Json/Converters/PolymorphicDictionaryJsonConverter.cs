@@ -85,8 +85,6 @@ public abstract class PolymorphicDictionaryJsonConverter<TType, T>
         {
             var keyString = JsonSerializer.Serialize(entry.Key, options).Trim('"');
 
-            writer.WritePropertyName(keyString);
-
             if (entry.Value != null)
             {
                 writer.WritePropertyName(keyString);
