@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
     {
         public void AddConfigurationOptions(Assembly assembly, IConfiguration configuration)
         {
-            foreach (var type in assembly.GetTypes().Where(t => t.IsConfigurationOptions))
+            foreach (var type in assembly.GetTypes().Where(t => t.IsConfigurationOptionsSection))
             {
                 services.AddConfigurationOptions(type, configuration);
             }
@@ -27,12 +27,12 @@ public static class ServiceCollectionExtensions
 
         public void AddConfigurationOptions(Type optionsType, IConfiguration configuration)
         {
-            if (!optionsType.IsConfigurationOptions)
+            if (!optionsType.IsConfigurationOptionsSection)
             {
                 throw new ArgumentException($"{optionsType} is not a configuration options type");
             }
 
-            var sectionName = optionsType.ConfigurationSectionName;
+            var sectionName = optionsType.ConfigurationOptionsSectionName;
 
             // Make it generic for your options type
             var generic = _configureMethod.MakeGenericMethod(optionsType);

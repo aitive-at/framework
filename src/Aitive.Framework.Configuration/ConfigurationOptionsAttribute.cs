@@ -10,18 +10,18 @@ public sealed class ConfigurationOptionsAttribute : System.Attribute
     public string? Name { get; set; }
 }
 
-internal static class ConfigurationOptionsExtensions
+public static class ConfigurationOptionsExtensions
 {
     extension(Type type)
     {
-        internal bool IsConfigurationOptions
+        public bool IsConfigurationOptionsSection
         {
             get =>
                 type.IsDefaultConstructibleClass
                 && type.GetCustomAttribute<ConfigurationOptionsAttribute>() != null;
         }
 
-        internal string ConfigurationSectionName
+        public string ConfigurationOptionsSectionName
         {
             get
             {
