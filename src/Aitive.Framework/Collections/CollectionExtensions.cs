@@ -14,5 +14,15 @@ public static class CollectionExtensions
 
             return collection;
         }
+
+        public TCollection RemoveAll(IEnumerable<T> values)
+        {
+            foreach (var value in values)
+            {
+                collection.Remove(value);
+            }
+
+            return collection;
+        }
     }
 }
