@@ -1,19 +1,23 @@
 ﻿using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Aitive.Framework.Configuration;
 
 public static class ServiceCollectionExtensions
 {
-    private static readonly MethodInfo _configureMethod =
-        typeof(OptionsConfigurationServiceCollectionExtensions)
-            .GetMethods()
-            .First(m =>
-                m is { Name: "Configure", IsGenericMethodDefinition: true }
-                && m.GetParameters().Length == 2
-                && m.GetParameters()[1].ParameterType == typeof(IConfiguration)
-            );
+    private static readonly MethodInfo addConfigurationBindingMethod =
+        typeof(ServiceCollectionExtensions).GetMethod(
+            nameof(AddConfigurationBinding),
+            BindingFlags.Static | BindingFlags.NonPublic
+        ) ?? throw new NotImplementedException("AddConfigurationBinding not implemented");
+
+    private static void AddConfigurationBinding<T>(IServiceCollection services)
+        where T : class
+    {
+        services.AddSingleton<IConfigureOptions<T>, UntypedConfigurationBinding<T>>();
+    }
 
     extension(IServiceCollection services)
     {
@@ -32,16 +36,10 @@ public static class ServiceCollectionExtensions
                 throw new ArgumentException($"{optionsType} is not a configuration options type");
             }
 
-            var sectionName = optionsType.ConfigurationOptionsSectionName;
+            services.AddOptions();
 
-            // Make it generic for your options type
-            var generic = _configureMethod.MakeGenericMethod(optionsType);
-
-            // Invoke: services.Configure<YourType>(configuration.GetSection(sectionName));
-            generic.Invoke(
-                obj: null,
-                parameters: [services, configuration.GetSection(sectionName)]
-            );
+            var finalMethod = addConfigurationBindingMethod.MakeGenericMethod(optionsType);
+            finalMethod.Invoke(null, [services]);
         }
     }
 }
