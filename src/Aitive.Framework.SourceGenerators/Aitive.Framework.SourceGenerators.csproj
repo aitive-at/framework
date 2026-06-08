@@ -5,6 +5,15 @@
     <IsRoslynComponent>true</IsRoslynComponent>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!--
+      Scriban's embedded source is annotated with trimming/AOT attributes
+      (RequiresUnreferencedCode, DynamicallyAccessedMembers, UnconditionalSuppressMessage, ...).
+      These don't exist in netstandard2.0's BCL and PolySharp skips this "runtime-supported"
+      family by default, so the compiler binds them to the internal copies embedded in
+      System.Text.Json and reports CS0122. Opting in makes PolySharp emit accessible
+      in-assembly polyfills instead.
+    -->
+    <PolySharpIncludeRuntimeSupportedAttributes>true</PolySharpIncludeRuntimeSupportedAttributes>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
     <DefineConstants>SCRIBAN_NO_ASYNC</DefineConstants>
     <IncludeBuildOutput>false</IncludeBuildOutput>
